@@ -4,7 +4,7 @@
 <img align="center" src="./media/agentic_seek_logo.png" width="300" height="300" alt="Agentic Seek Logo">
 <p>
 
-  English | [中文](./README_CHS.md) | [繁體中文](./README_CHT.md) | [Français](./README_FR.md) | [日本語](./README_JP.md)
+  English | [中文](./README_CHS.md) | [繁體中文](./README_CHT.md) | [Français](./README_FR.md) | [日本語](./README_JP.md) | [Português (Brasil)](./README_PTBR.md)
 
 *A **100% local alternative to Manus AI**, this voice-enabled AI assistant autonomously browses the web, writes code, and plans tasks while keeping all data on your device. Tailored for local reasoning models, it runs entirely on your hardware, ensuring complete privacy and zero cloud dependency.*
 
@@ -22,7 +22,7 @@
 
 * 📋 Plans & Executes Complex Tasks - From trip planning to complex projects — it can split big tasks into steps and get things done using multiple AI agents.
 
-* 🎙️ Voice-Enabled - Clean, fast, futuristic voice and speech to text allowing you to talk to it like it's your personal AI from a sci-fi movie
+* 🎙️ Voice-Enabled - Clean, fast, futuristic voice and speech to text allowing you to talk to it like it's your personal AI from a sci-fi movie. (In progress)
 
 ### **Demo**
 
@@ -32,13 +32,10 @@ https://github.com/user-attachments/assets/b8ca60e9-7b3b-4533-840e-08f9ac426316
 
 Disclaimer: This demo, including all the files that appear (e.g: CV_candidates.zip), are entirely fictional. We are not a corporation, we seek open-source contributors not candidates.
 
-> 🛠️ **Work in Progress** – Looking for contributors!
+> 🛠⚠️️ **Active Work in Progress**
 
-## Installation
+> 🙏 This project started as a side-project and has zero roadmap and zero funding. It's grown way beyond what I expected by ending in GitHub Trending. Contributions, feedback, and patience are deeply appreciated.
 
-This section guides you through installing AgenticSeek. Please follow the steps carefully.
-
-### **Prerequisites**
 
 Before you begin, ensure you have the following software installed:
 
@@ -53,153 +50,13 @@ Before you begin, ensure you have the following software installed:
 
 For issues related to ChromeDriver after attempting installation, see the [Known Issues](#chromedriver-issues) section.
 
-### 1️⃣ **Clone the repository and setup**
+### 1. **Clone the repository and setup**
 
 ```sh
 git clone https://github.com/Fosowl/agenticSeek.git
 cd agenticSeek
 mv .env.example .env
 ```
-
-### 2️ **Create a Python Virtual Environment**
-
-It's highly recommended to use a virtual environment to manage project dependencies.
-
-```sh
-# Ensure you are using Python 3.10 for creating the environment
-python3.10 -m venv agentic_seek_env 
-# Or if 'python3.10' is not found, try 'python3 -m venv agentic_seek_env' 
-# but verify version with 'python --version' inside the activated environment.
-
-# Activate the virtual environment
-source agentic_seek_env/bin/activate
-# On Windows PowerShell: .\agentic_seek_env\Scripts\Activate.ps1
-# On Windows CMD: agentic_seek_env\Scripts\activate.bat
-```
-
-### 3️⃣ **Install Dependencies**
-
-This step includes installing Python packages and setting up ChromeDriver.
-
-#### **ChromeDriver Installation**
-
-1.  **Check your Chrome Version:** Open Google Chrome, go to `Settings -> About Chrome` to find your version (e.g., 120.0.6099.110).
-2.  **Download ChromeDriver:**
-    *   For Chrome version 115 or newer, download from [Chrome for Testing (CfT) JSON Endpoints](https://googlechromelabs.github.io/chrome-for-testing/). Find the stable version matching your Chrome's major version.
-    *   For older versions (not recommended), you might find them on the [ChromeDriver downloads page](https://chromedriver.chromium.org/downloads).
-3.  **Install ChromeDriver:**
-    *   **Linux/macOS:** Download the appropriate zip file, extract `chromedriver`, and move it to a directory in your system's PATH (e.g., `/usr/local/bin`). Ensure it's executable (`chmod +x /usr/local/bin/chromedriver`).
-    *   **Windows:** Download the zip file, extract `chromedriver.exe`, and place it in a directory included in your system's PATH (e.g., `C:\Windows\System32` or a dedicated scripts folder that you've added to PATH).
-    *   Alternatively, you can place `chromedriver` (or `chromedriver.exe`) directly in the root of the `agenticSeek` project directory. The application will try to find it there.
-
-#### **Python Packages & System Dependencies**
-
-**Automatic Installation (Recommended):**
-
-The following scripts attempt to install system dependencies (like `portaudio`) and Python packages from `requirements.txt`.
-
-*   **Linux/macOS:**
-    ```sh
-    ./install.sh
-    ```
-*   **Windows:**
-    ```sh
-    ./install.bat
-    ```
-    *Note for Windows:* The batch script will attempt to install `pyaudio`. This may require "Microsoft Visual C++ 14.0 or greater". If `pyaudio` installation fails, you might need to install it manually via a wheel file or install PortAudio first. See manual Windows instructions below.
-
-**Manual Installation:**
-
-If automatic installation fails or you prefer manual setup:
-
-*   **All Operating Systems:**
-    1.  Ensure your virtual environment is active.
-    2.  Install Python packages:
-        ```sh
-        pip3 install -r requirements.txt
-        ```
-
-*   **Linux Specific System Dependencies:**
-    ```sh
-    sudo apt update
-    sudo apt install -y alsa-utils portaudio19-dev python3-pyaudio libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1
-    ```
-    *(Note: `python3-pyaudio` might be handled by `pip install` if `portaudio19-dev` is present).*
-
-*   **macOS Specific System Dependencies:**
-    ```sh
-    brew update
-    brew install portaudio  # For pyaudio
-    # ChromeDriver should be handled by the dedicated ChromeDriver Installation step above.
-    # `brew install --cask chromedriver` can also work but ensure version compatibility.
-    ```
-
-*   **Windows Specific System Dependencies:**
-    1.  `pip install pyreadline3` (usually part of `requirements.txt`)
-    2.  **PortAudio for PyAudio:**
-        *   `pyaudio` (for voice functionality) requires PortAudio. If `pip install pyaudio` (from `requirements.txt`) fails:
-            *   Try installing from a pre-compiled wheel: Find a `pyaudio` wheel compatible with your Python version (3.10) and system architecture from sites like [Christoph Gohlke's Python Libraries page](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio). Download the `.whl` file and install with `pip install PyAudio‑XYZ.whl`.
-            *   Alternatively, install PortAudio via a package manager like [vcpkg](https://vcpkg.io/en/index.html) or by [building from source](http://files.portaudio.com/docs/v19-doxydocs/compile_windows.html), then try `pip install pyaudio` again.
-
----
-## Configuration (`config.ini`)
-
-Before running AgenticSeek, you need to configure it by editing the `config.ini` file. This file is created when you run `mv .env.example .env` during the initial setup.
-
-Key settings are explained in the [Config Section](#config) later in this README. For now, be aware that you'll need to update it based on whether you're running an LLM locally or via an API.
-
----
-
-## Running AgenticSeek
-
-Choose one of the following setups based on how you want to run the Large Language Model (LLM).
-
-## Setup for running LLM locally on your machine
-
-This setup allows you to run AgenticSeek with an LLM hosted entirely on your own hardware, ensuring privacy.
-
-**Hardware Requirements:**
-
-Running LLMs locally requires significant hardware resources. Refer to the [FAQ: What hardware do I need?](#faq) for detailed model performance and hardware recommendations (minimum 8GB VRAM GPU, 12GB+ recommended).
-
-**1. Install a Local LLM Provider:**
-
-You need software to serve the LLM locally. Popular choices:
-
-*   **Ollama:**
-    *   **Installation:** Download and install Ollama from [ollama.ai](https://ollama.ai/).
-    *   **Homepage:** [https://ollama.ai/](https://ollama.ai/)
-*   **LM-Studio:**
-    *   **Installation:** Download and install LM-Studio from [lmstudio.ai](https://lmstudio.ai/).
-    *   **Homepage:** [https://lmstudio.ai/](https://lmstudio.ai/)
-*   **OpenAI-Compatible Server (e.g., llama.cpp, vLLM):**
-    *   These are more advanced setups. You'll need to follow their respective documentation to start a server that exposes an OpenAI-compatible API.
-    *   Example: [llama.cpp server documentation](https://github.com/ggerganov/llama.cpp/tree/master/examples/server)
-
-**2. Download/Select a Model:**
-
-Once your provider is installed, download a model. We recommend reasoning models like *Qwen* or *Deepseek*.
-
-*   **For Ollama:**
-    ```sh
-    ollama pull deepseekcoder:6.7b # Example: deepseek-coder 6.7B
-    ollama pull qwen:14b           # Example: Qwen 14B
-    # List available models with `ollama list`
-    ```
-*   **For LM-Studio:** Use the UI to search for and download models.
-*   **For OpenAI-Compatible Servers:** Configure the server to use your desired model.
-
-**3. Start Your Local LLM Provider:**
-
-*   **Ollama:**
-    ```sh
-    ollama serve
-    ```
-    (This often runs automatically after installation on some systems).
-*   **LM-Studio:** Start the application and use its UI to load a model and start the server.
-*   **OpenAI-Compatible Server:** Follow its specific instructions to start the server.
-
-**4. Update `config.ini`:**
 
 Modify your `config.ini` file:
 ```ini
@@ -234,7 +91,7 @@ See below for a list of local supported provider.
 
 **Update the config.ini**
 
-Change the config.ini file to set the provider_name to a supported provider and provider_model to a LLM supported by your provider. We recommand reasoning model such as *Qwen* or *Deepseek*.
+Change the config.ini file to set the provider_name to a supported provider and provider_model to a LLM supported by your provider. We recommend reasoning model such as *Qwen* or *Deepseek*.
 
 See the **FAQ** at the end of the README for required hardware.
 
@@ -247,23 +104,14 @@ provider_server_address = http://127.0.0.1:11434 # Default for Ollama. Use http:
 agent_name = Jarvis # name of your AI
 recover_last_session = True # whenever to recover the previous session
 save_session = True # whenever to remember the current session
-speak = True # text to speech
-listen = False # Speech to text, only for CLI
-work_dir =  /Users/mlg/Documents/workspace # The workspace for AgenticSeek.
+speak = False # text to speech
+listen = False # Speech to text, only for CLI, experimental
 jarvis_personality = False # Whenever to use a more "Jarvis" like personality (experimental)
 languages = en zh # The list of languages, Text to speech will default to the first language on the list
 [BROWSER]
-headless_browser = True # Whenever to use headless browser, recommanded only if you use web interface.
+headless_browser = True # leave unchanged unless using CLI on host.
 stealth_mode = True # Use undetected selenium to reduce browser detection
 ```
-
-**List of local providers** (summary)
-
-| Provider  | Local? | `provider_name` in `config.ini` | Description                                                      |
-|-----------|--------|---------------------------------|------------------------------------------------------------------|
-| Ollama    | Yes    | `ollama`                        | Run LLMs locally with ease using Ollama.                         |
-| LM-Studio | Yes    | `lm-studio`                     | Run LLMs locally with LM-Studio's UI and server.                 |
-| OpenAI Compatible API | Yes | `openai`               | Use a local server (e.g., llama.cpp, vLLM) that mimics the OpenAI API. |
 
 Next step: [Start services and run AgenticSeek](#start-services-and-run)
 
@@ -283,7 +131,6 @@ Refer to the [List of API Providers](#list-of-api-providers) below. Visit their 
 
 **2. Set Your API Key as an Environment Variable:**
 
-AgenticSeek expects the API key to be available as an environment variable.
 
 *   **Linux/macOS:**
     Open your terminal and use the `export` command. It's best to add this to your shell's profile file (e.g., `~/.bashrc`, `~/.zshrc`) for persistence.
@@ -335,15 +182,6 @@ provider_server_address = # Typically ignored or can be left blank when is_local
 *   Coding/bash tasks might encounter issues with Gemini, as it may not strictly follow formatting prompts optimized for Deepseek.
 *   The `provider_server_address` in `config.ini` is generally not used when `is_local = False` as the API endpoint is usually hardcoded in the respective provider's library.
 
-Next step: [Start services and run AgenticSeek](#start-services-and-run)
-
-*See the [Troubleshooting](#troubleshooting) section if you are having issues.*
-*For detailed `config.ini` explanations, see [Config Section](#config).*
-
----
-
-Please also note that coding/bash might fail with gemini, it seem to ignore our prompt for format to respect, which are optimized for deepseek r1.
-
 Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
 *See the **Known issues** section if you are having issues*
@@ -354,60 +192,36 @@ Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
 ## Start services and Run
 
-Activate your Python virtual environment if it's not already active:
-```sh
-# Linux/macOS
-source agentic_seek_env/bin/activate
-
-# Windows PowerShell
-.\agentic_seek_env\Scripts\Activate.ps1
-
-# Windows CMD
-agentic_seek_env\Scripts\activate.bat
-```
-
-Start required background services using Docker Compose. This will launch:
-    - SearxNG (local meta-search engine)
-    - Redis (database for SearxNG)
-    - Frontend (web interface, if you choose to use it)
-
-```sh
-# For Linux (if your user is not in the docker group, sudo might be required for docker commands)
-./start_services.sh 
-# or if you need sudo for Docker: sudo ./start_services.sh
-
-# For macOS (sudo is typically not required if Docker Desktop is correctly installed)
-./start_services.sh
-
-# For Windows
-start ./start_services.cmd 
-# This will open a new command prompt window for the services.
 ```
 *Troubleshooting service start:* If these scripts fail, ensure Docker Engine is running and Docker Compose (V2, `docker compose`) is correctly installed. Check the output in the terminal for error messages. See [FAQ: Help! I get an error when running AgenticSeek or its scripts.](#faq-troubleshooting)
 
-**Options 1:** Run with the CLI interface.
-
-```sh
-python3 cli.py
-```
-
-We advice you set `headless_browser` to False in the config.ini for CLI mode.
-
-**Options 2:** Run with the Web interface.
-
-Start the backend.
-
-```sh
-python3 api.py
-```
+**Warning:** This step will download and load all Docker images, which may take up to 30 minutes. After starting the services, please wait until the backend service is fully running (you should see backend: <info> in the log) before sending any messages. The backend services may take longer to start than others.
 
 Go to `http://localhost:3000/` and you should see the web interface.
+
+**Optional:** Run with the CLI interface:
+
+To run with CLI interface you would have to install package on host:
+
+```sh
+./install.sh
+./install.bat # windows
+```
+
+Start services:
+
+```sh
+./start_services.sh # MacOS
+start ./start_services.cmd # Window
+```
+
+Then run : `python3 cli.py`
 
 ---
 
 ## Usage
 
-Make sure the services are up and running with `./start_services.sh` and run the AgenticSeek with `python3 cli.py` for CLI mode or `python3 api.py` then go to `localhost:3000` for web interface.
+Make sure the services are up and running with `./start_services.sh full` and go to `localhost:3000` for web interface.
 
 You can also use speech to text by setting `listen = True` in the config. Only for CLI mode.
 
@@ -503,6 +317,8 @@ Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
 ## Speech to Text
 
+Warning: speech to text only work in CLI mode at the moment.
+
 Please note that currently speech to text only work in english.
 
 The speech-to-text functionality is disabled by default. To enable it, set the listen option to True in the config.ini file:
@@ -542,7 +358,7 @@ recover_last_session = False
 save_session = False
 speak = False
 listen = False
-work_dir =  /Users/mlg/Documents/ai_folder # IMPORTANT: Update this to a valid path on your system
+
 jarvis_personality = False
 languages = en zh # List of languages for TTS and potentially routing.
 [BROWSER]
@@ -574,8 +390,6 @@ stealth_mode = False
     *   `headless_browser`: `True` to run the automated browser without a visible window (recommended for web interface or non-interactive use). `False` to show the browser window (useful for CLI mode or debugging).
     *   `stealth_mode`: `True` to enable measures to make browser automation harder to detect. May require manual installation of browser extensions like anticaptcha.
 
----
-## Providers
 
 This section summarizes the supported LLM provider types. Configure them in `config.ini`.
 
@@ -662,165 +476,6 @@ raise ValueError("SearxNG base URL must be provided either as an argument or via
 ValueError: SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.`
 ```
 
-*   **Cause:** The `.env` file is missing or the `SEARXNG_BASE_URL` variable is not set within it.
-*   **Solution:**
-    1.  Ensure you have copied `.env.example` to `.env` in the root of the project directory (`mv .env.example .env` on Linux/macOS or `copy .env.example .env` on Windows).
-    2.  Verify that the `.env` file contains `SEARXNG_BASE_URL="http://127.0.0.1:8080"`.
-    3.  Alternatively (not recommended for permanent setup), you can set the environment variable in your terminal:
-        *   Linux/macOS: `export SEARXNG_BASE_URL="http://127.0.0.1:8080"`
-        *   Windows (CMD): `set SEARXNG_BASE_URL="http://127.0.0.1:8080"`
-        *   Windows (PowerShell): `$env:SEARXNG_BASE_URL="http://127.0.0.1:8080"`
-
-## FAQ (Frequently Asked Questions)
-
-<a name="faq-hardware"></a>
-**Q: What hardware do I need to run LLMs locally?**
-
-| Model Size | Minimum GPU VRAM | Performance & Capability Notes                                                                 | Example GPU Tier    |
-|------------|------------------|------------------------------------------------------------------------------------------------|---------------------|
-| ~7B        | 8GB VRAM         | ⚠️ **Not Recommended for Agentic Tasks:** Performance is generally poor for complex reasoning, web browsing, or planning. May work for very simple queries. Expect frequent errors or nonsensical outputs. | e.g., RTX 3050 Laptop |
-| ~14B       | 12GB VRAM        | ✅ **Basic Usability:** Can handle simpler tasks. May struggle with extensive web browsing, complex planning, or generating very long code sequences. | e.g., RTX 3060 (12GB) |
-| ~30-34B    | 24GB VRAM        | 🚀 **Good Performance:** Suitable for most tasks, including moderately complex web browsing and planning. Good balance of capability and resource requirements. | e.g., RTX 3090, RTX 4090 |
-| 70B+       | 48GB VRAM        | 💪 **Excellent Performance:** Recommended for advanced use cases, extensive research, and complex multi-step planning. Provides the most robust results. | e.g., 2x RTX 3090, A100 (40/80GB), Mac Studio M2/M3 Ultra |
-
-*Notes:*
-*   These are general guidelines. Performance also depends on model quantization, software (e.g., Ollama, LM-Studio), and CPU/RAM speed.
-*   Always check the specific model card for memory recommendations.
-*   Using CPU for inference is possible with some setups (e.g., Ollama with smaller models) but will be significantly slower.
-
-<a name="faq-deepseek"></a>
-**Q: Why is Deepseek R1 often mentioned or recommended?**
-
-Deepseek models (especially their coder series) have shown strong performance in reasoning, instruction following, and tool/function calling for their size. AgenticSeek's prompts and internal logic have been tested extensively with these models. While other models can work, Deepseek often provides a good baseline experience for agentic tasks.
-
-<a name="faq-troubleshooting"></a>
-**Q: Help! I get an error when running AgenticSeek or its scripts. What should I do?**
-
-Here's a step-by-step troubleshooting guide:
-
-1.  **Read the Error Message Carefully:** The error message itself is the most important clue. Try to understand what it's saying.
-2.  **Check Prerequisites & Installation:**
-    *   **Python Version:** Are you using Python 3.10.x? Verify with `python --version` (or `python3.10 --version`) in your activated virtual environment.
-    *   **Virtual Environment:** Is your virtual environment (`agentic_seek_env`) activated? You should see its name in your terminal prompt. If not, activate it (see [Installation](#2️-create-a-python-virtual-environment)).
-    *   **Dependencies:** Did `pip3 install -r requirements.txt` complete without errors? If not, address those errors first. Check for missing system dependencies mentioned in the [Manual Installation](#manual-installation) section.
-    *   **Core Software:** Are Git, Docker Engine, Docker Compose (V2, `docker compose`), and Google Chrome installed correctly?
-    *   **ChromeDriver:** Is ChromeDriver installed, matching your Chrome version, and accessible (in PATH or project root)? See [ChromeDriver Installation](#chromedriver-installation) and [ChromeDriver Issues](#chromedriver-issues).
-3.  **Verify Service Status (`./start_services.sh` or `start_services.cmd`):**
-    *   Did this script complete successfully? Review its output for any error messages (e.g., Docker not running, port conflicts).
-    *   Are essential services like SearxNG running? Try accessing `http://localhost:8080` in your browser. If it doesn't load, the services didn't start correctly.
-4.  **Check `config.ini` (See [Config Section](#config) for details):**
-    *   Is the file correctly named `config.ini` (not `config.ini.example`)?
-    *   `provider_name`: Does it match your intended setup (e.g., `ollama`, `lm-studio`, `openai`, `google`)?
-    *   `is_local`: `True` for local LLMs, `False` for cloud APIs.
-    *   `provider_server_address`:
-        *   For local LLMs: Is it correct (e.g., `http://127.0.0.1:11434` for Ollama, `http://127.0.0.1:1234` for LM-Studio)? Does it include `http://`?
-        *   For API usage, this is usually less critical but ensure it's not misconfigured if present.
-    *   `work_dir`: Is this set to a valid, existing directory path on your system where AgenticSeek can read/write files?
-5.  **Local LLM Provider Status (if `is_local = True`):**
-    *   Is your chosen LLM provider software (Ollama, LM-Studio) running independently?
-        *   Ollama: `ollama serve` should be active (often runs as a background service after installation). Check with `ollama list`.
-        *   LM-Studio: The application should be open, the model loaded, and the local server started from its UI.
-    *   Have you downloaded/pulled the specific model listed in `provider_model` in `config.ini`? (e.g., `ollama pull model-name`).
-6.  **API Key Setup (if `is_local = False`):**
-    *   Is the API key correctly set as an environment variable for your current terminal session? (See [Setup to run with an API](#2-set-your-api-key-as-an-environment-variable) and [FAQ: How do I set API keys?](#how-do-i-set-api-keys)).
-    *   Is the key itself correct and active?
-7.  **Consult Known Issues:** Review the [Known Issues](#known-issues) section above for solutions to common problems.
-8.  **Search GitHub Issues:** Check if other users have reported similar problems on the [AgenticSeek GitHub Issues page](https://github.com/Fosowl/agenticSeek/issues).
-9.  **Raise an Issue:** If you're still stuck, please [create a new issue](https://github.com/Fosowl/agenticSeek/issues/new/choose). Provide as much detail as possible:
-    *   Your Operating System (e.g., Windows 11, macOS Sonoma, Ubuntu 22.04).
-    *   Python version.
-    *   Relevant parts of your `config.ini` (please redact API keys).
-    *   The exact steps you took.
-    *   The full error message and any relevant logs from the terminal.
-
-<a name="faq-100-local"></a>
-**Q: Can AgenticSeek really run 100% locally?**
-
-Yes. When configured with a local LLM provider like Ollama or LM-Studio (and `is_local = True` in `config.ini`), all core components—LLM inference, web search (via local SearxNG), speech-to-text, and text-to-speech—can run on your machine without sending data to external cloud services. Using API providers is optional.
-
-<a name="faq-install-local-llm"></a>
-**Q: How do I install local LLM providers like Ollama or LM-Studio?**
-
-*   **Ollama:**
-    1.  Go to [ollama.ai](https://ollama.ai/).
-    2.  Download the installer for your operating system (Windows, macOS, Linux).
-    3.  Run the installer. Ollama typically sets itself up as a background service.
-    4.  Open your terminal and you can start pulling models (e.g., `ollama pull deepseekcoder:6.7b`).
-    5.  Run `ollama serve` if it's not already running (though it usually starts automatically).
-*   **LM-Studio:**
-    1.  Go to [lmstudio.ai](https://lmstudio.ai/).
-    2.  Download the installer for your system.
-    3.  Install and run the application.
-    4.  Use the LM-Studio UI to search for and download models.
-    5.  In the "Local Server" tab, select your model and click "Start Server".
-
-<a name="faq-get-models-local"></a>
-**Q: Where do I get models (e.g., Deepseek, Qwen) for my local provider?**
-
-*   **Ollama:** Use the `ollama pull` command followed by the model name and tag. Common models can be found on [Ollama's model library](https://ollama.ai/library).
-    ```sh
-    ollama pull deepseekcoder:6.7b  # Pulls a specific version of Deepseek Coder
-    ollama pull qwen:14b             # Pulls a specific version of Qwen
-    ollama list                     # Shows models you have downloaded
-    ```
-*   **LM-Studio:** Use the search bar within the LM-Studio application to find models from Hugging Face and other sources. You can then download them through the UI. Ensure you download GGUF format models compatible with llama.cpp-based engines, which LM-Studio uses.
-
-<a name="faq-set-api-keys"></a>
-**Q: How do I set API keys (e.g., for OpenAI, Google) correctly?**
-
-API keys are usually set as environment variables. This means they are variables available to the processes running in your terminal session or system-wide.
-
-*   **Linux/macOS:**
-    *   **For the current terminal session only:**
-        ```sh
-        export OPENAI_API_KEY="your_openai_api_key_here"
-        export GOOGLE_API_KEY="your_google_api_key_here" 
-        # etc. for other providers
-        ```
-    *   **For persistence (recommended):** Add the `export` line(s) to your shell's configuration file. This file is usually:
-        *   `~/.bashrc` (for Bash shell, common on Linux)
-        *   `~/.zshrc` (for Zsh shell, default on newer macOS)
-        *   `~/.profile` or `~/.bash_profile` (other common locations)
-        After adding the line, either source the file (e.g., `source ~/.bashrc`) or open a new terminal window for the changes to take effect.
-
-*   **Windows:**
-    *   **Command Prompt (CMD - for current session only):**
-        ```cmd
-        set OPENAI_API_KEY=your_openai_api_key_here
-        ```
-    *   **PowerShell (for current session only):**
-        ```powershell
-        $env:OPENAI_API_KEY="your_openai_api_key_here"
-        ```
-    *   **Permanently (Recommended):**
-        1.  In the Windows search bar, type "environment variables" and select "Edit the system environment variables."
-        2.  In the System Properties window, click the "Environment Variables..." button.
-        3.  Under "User variables" (for your account only) or "System variables" (for all users, requires admin rights), click "New...".
-        4.  Enter the variable name (e.g., `OPENAI_API_KEY`) and the variable value (your actual API key).
-        5.  Click OK on all windows. You may need to close and reopen any active Command Prompt or PowerShell windows for the changes to take effect.
-
-**Important:**
-*   Replace `OPENAI_API_KEY`, `GOOGLE_API_KEY`, etc., with the specific environment variable name expected by the application or library for that provider. These are often found in the provider's API documentation.
-*   Ensure there are no extra spaces or quotes around the actual key unless they are part of the key itself.
-
-<a name="faq-install-script-fails"></a>
-**Q: What if `install.sh` or `install.bat` fails?**
-
-If the automatic installation scripts encounter errors:
-1.  **Examine the Output:** Look closely at the error messages printed in the terminal. This will often tell you which step failed and why.
-2.  **Try Manual Installation:** Follow the [Manual Installation](#manual-installation) steps for your operating system. This gives you more control over each step and can help pinpoint the problem.
-3.  **System Dependencies:** Failures are often due to missing system-level dependencies required by Python packages (e.g., `portaudio-dev` for `pyaudio`). Ensure these are installed.
-4.  **Permissions:** On Linux/macOS, some commands within the script might require `sudo` if your user doesn't have the necessary permissions (e.g., for installing system packages).
-5.  If you continue to have issues, refer to the general [troubleshooting FAQ](#faq-troubleshooting).
-
-**Q: Why should I use AgenticSeek as an alternative to other tools?**
-
-AgenticSeek was started as a side-project driven by interest in AI agents, with a strong emphasis on:
-*   **Local First & Privacy:** Prioritizing the ability to run entirely on your own hardware using local LLMs, ensuring your data stays private and avoiding API costs.
-*   **Open Source:** Allowing for transparency, community contributions, and customization.
-*   **Inspired by Sci-Fi, Built for Practicality:** Drawing inspiration from concepts like Jarvis and Friday for a "cool" user experience, while focusing on practical functionalities similar to tools like Manus AI, aiming to provide a robust local alternative.
-*   **Control & Independence:** Giving users more control over their AI assistant by reducing dependency on external, proprietary systems.
-
 ## Contribute
 
 We’re looking for developers to improve AgenticSeek! Check out open issues or discussion.
@@ -831,8 +486,13 @@ We’re looking for developers to improve AgenticSeek! Check out open issues or 
 
 ## Maintainers:
 
- > [Fosowl](https://github.com/Fosowl) | Paris Time | (Sometime busy)
+ > [Fosowl](https://github.com/Fosowl) | Paris Time 
 
- > [https://github.com/antoineVIVIES](antoineVIVIES) | Taipei Time | (Often busy)
+ > [antoineVIVIES](https://github.com/antoineVIVIES) | Taipei Time 
 
- > [steveh8758](https://github.com/steveh8758) | Taipei Time | (Always busy)
+ > [steveh8758](https://github.com/steveh8758) | Taipei Time 
+
+## Special Thanks:
+
+ > [tcsenpai](https://github.com/tcsenpai) and [plitc](https://github.com/plitc) For helping with backend dockerization
+
