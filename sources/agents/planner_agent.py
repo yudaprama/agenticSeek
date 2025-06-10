@@ -1,5 +1,5 @@
 import json
-from typing import List, Tuple, Type, Dict
+from typing import List, Tuple, Type, Dict, Optional, Union
 from sources.utility import pretty_print, animate_thinking
 from sources.agents.agent import Agent
 from sources.agents.code_agent import CoderAgent
@@ -216,12 +216,12 @@ class PlannerAgent(Agent):
         self.logger.info(f"Plan updated:\n{plan}")
         return plan
     
-    async def start_agent_process(self, task: dict, required_infos: dict | None) -> str:
+    async def start_agent_process(self, task: dict, required_infos: Optional[dict]) -> str:
         """
         Starts the agent process for a given task.
         Args:
             task (dict): The task to be performed.
-            required_infos (dict | None): The required information for the task.
+            required_infos (Optional[dict]): The required information for the task.
         Returns:
             str: The result of the agent process.
         """

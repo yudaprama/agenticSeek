@@ -4,9 +4,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import TimeoutException, WebDriverException, ElementClickInterceptedException
 from selenium.webdriver.common.action_chains import ActionChains
-from typing import List, Tuple, Type, Dict
+from typing import List, Tuple, Type, Dict, Optional, Union
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from fake_useragent import UserAgent
@@ -60,11 +60,7 @@ def get_chrome_path() -> str:
     chrome_path_env = os.environ.get("CHROME_EXECUTABLE_PATH")
     if chrome_path_env and os.path.exists(chrome_path_env) and os.access(chrome_path_env, os.X_OK):
         return chrome_path_env
-    path = input("Google Chrome not found. Please enter the path to the Chrome executable: ")
-    if os.path.exists(path) and os.access(path, os.X_OK):
-        os.environ["CHROME_EXECUTABLE_PATH"] = path
-        print(f"Chrome path saved to environment variable CHROME_EXECUTABLE_PATH")
-        return path
+    print("Google Chrome not found. Browser functionality will be disabled.")
     return None
 
 def get_random_user_agent() -> str:
@@ -119,13 +115,14 @@ def create_undetected_chromedriver(service, chrome_options) -> webdriver.Chrome:
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
     return driver
 
-def create_driver(headless=False, stealth_mode=True, crx_path="./crx/nopecha.crx", lang="en") -> webdriver.Chrome:
+def create_driver(headless=False, stealth_mode=True, crx_path="./crx/nopecha.crx", lang="en") -> Optional[webdriver.Chrome]:
     """Create a Chrome WebDriver with specified options."""
     chrome_options = Options()
     chrome_path = get_chrome_path()
-    
+
     if not chrome_path:
-        raise FileNotFoundError("Google Chrome not found. Please install it.")
+        print("Google Chrome not found. Browser functionality will be disabled.")
+        return None
     chrome_options.binary_location = chrome_path
     
     if headless:
@@ -310,7 +307,7 @@ class Browser:
         is_long_enough = word_count > 4
         return (word_count >= 5 and (has_punctuation or is_long_enough))
 
-    def get_text(self) -> str | None:
+    def get_text(self) -> Optional[str]:
         """Get page text as formatted Markdown"""
         try:
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
@@ -587,7 +584,7 @@ class Browser:
         self.logger.warning("No submission button found")
         return False
     
-    def find_input_xpath_by_name(self, inputs, name: str) -> str | None:
+    def find_input_xpath_by_name(self, inputs, name: str) -> Optional[str]:
         for field in inputs:
             if name in field["text"]:
                 return field["xpath"]

@@ -56,11 +56,13 @@ def initialize_system():
     provider = Provider(server_address=config["MAIN"]["server_address"])
     logger.info(f"Provider initialized: {provider.provider_name} ({provider.model})")
 
-    browser = Browser(
-        create_driver(headless=config.getboolean('BROWSER', 'headless_browser'), stealth_mode=stealth_mode, lang=languages[0]),
-        anticaptcha_manual_install=stealth_mode
-    )
-    logger.info("Browser initialized")
+    driver = create_driver(headless=config.getboolean('BROWSER', 'headless_browser'), stealth_mode=stealth_mode, lang=languages[0])
+    if driver is None:
+        browser = None
+        logger.warning("Browser disabled - Chrome not found")
+    else:
+        browser = Browser(driver, anticaptcha_manual_install=stealth_mode)
+        logger.info("Browser initialized")
 
     agents = [
         CasualAgent(

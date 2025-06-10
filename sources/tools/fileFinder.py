@@ -2,6 +2,7 @@ import os, sys
 import stat
 import mimetypes
 import configparser
+from typing import Optional, List
 
 if __name__ == "__main__": # if running as a script for individual testing
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -83,7 +84,7 @@ class FileFinder(Tools):
         else:
             return {"filename": file_path, "error": "File not found"}
     
-    def recursive_search(self, directory_path: str, filename: str) -> str | None:
+    def recursive_search(self, directory_path: str, filename: str) -> Optional[str]:
         """
         Recursively searches for files in a directory and its subdirectories.
         Args:
@@ -106,7 +107,7 @@ class FileFinder(Tools):
         return None
         
 
-    def execute(self, blocks: list, safety:bool = False) -> str:
+    def execute(self, blocks: List[str], safety: bool = False) -> str:
         """
         Executes the file finding operation for given filenames.
         Args:

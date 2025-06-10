@@ -20,6 +20,7 @@ import { Input } from './components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
 import { ScrollArea } from './components/ui/scroll-area';
+import { ThemeToggle } from './components/theme-toggle';
 import { cn } from './lib/utils';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
@@ -193,9 +194,9 @@ function App() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex flex-col">
+    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex flex-col">
       {/* Header */}
-      <header className="border-b bg-white/90 backdrop-blur-sm dark:bg-slate-900/90 px-6 py-3 flex-shrink-0">
+      <header className="border-b bg-white/90 backdrop-blur-sm dark:bg-slate-950/90 px-6 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
@@ -213,6 +214,7 @@ function App() {
             <Badge variant="outline" className="text-sm">
               {status}
             </Badge>
+            <ThemeToggle />
           </div>
         </div>
       </header>

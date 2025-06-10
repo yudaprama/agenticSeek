@@ -4,7 +4,7 @@ import uuid
 import os
 import sys
 import json
-from typing import List, Tuple, Type, Dict
+from typing import List, Tuple, Type, Dict, Optional, Union
 
 from sources.utility import timer_decorator, pretty_print
 from sources.logger import Logger
@@ -36,7 +36,7 @@ class Memory():
         self.model_provider = model_provider
         # Memory compression disabled - no model loading
 
-    def get_ideal_ctx(self, model_name: str) -> int | None:
+    def get_ideal_ctx(self, model_name: str) -> Optional[int]:
         """
         Estimate context size based on the model name.
         EXPERIMENTAL for memory compression

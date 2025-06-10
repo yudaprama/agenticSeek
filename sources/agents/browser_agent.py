@@ -1,7 +1,7 @@
 import re
 import time
 from datetime import date
-from typing import List, Tuple, Type, Dict
+from typing import List, Tuple, Type, Dict, Optional
 from enum import Enum
 import asyncio
 
@@ -234,7 +234,7 @@ class BrowserAgent(Agent):
         self.notes.append('. '.join(buffer).strip())
         return links
     
-    def select_link(self, links: List[str]) -> str | None:
+    def select_link(self, links: List[str]) -> Optional[str]:
         """
         Select the first unvisited link that is not the current page.
         Preference is given to links not in search_history.

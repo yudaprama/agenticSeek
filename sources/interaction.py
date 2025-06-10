@@ -21,7 +21,7 @@ class Interaction:
         self.last_reasoning = None
         self.agents = agents
         self.recover_last_session = recover_last_session
-        self.router = AgentRouter(self.agents, supported_language=langs)
+        self.router = AgentRouter(self.agents)
         self.ai_name = self.find_ai_name()
         self.is_generating = False
         self.languages = langs

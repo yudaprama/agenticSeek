@@ -21,6 +21,7 @@ import sys
 import os
 import configparser
 from abc import abstractmethod
+from typing import List, Tuple, Optional, Union
 
 if __name__ == "__main__": # if running as a script for individual testing
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -47,8 +48,8 @@ class Tools():
     def get_work_dir(self):
         return self.work_dir
     
-    def set_allow_language_exec_bash(value: bool) -> None:
-        self.allow_language_exec_bash = value 
+    def set_allow_language_exec_bash(self, value: bool) -> None:
+        self.allow_language_exec_bash = value
 
     def safe_get_work_dir_path(self):
         path = None
@@ -69,13 +70,14 @@ class Tools():
         default_path = os.path.dirname(os.getcwd())
         if self.config_exists():
             self.config.read('./config.ini')
-            workdir_path = self.safe_get_work_dir_path()
+            # Get work_dir directly from config to avoid recursion
+            workdir_path = self.config['MAIN']['work_dir'] if 'MAIN' in self.config and 'work_dir' in self.config['MAIN'] else default_path
         else:
             workdir_path = default_path
         return workdir_path
 
     @abstractmethod
-    def execute(self, blocks:[str], safety:bool) -> str:
+    def execute(self, blocks: List[str], safety: bool) -> str:
         """
         Abstract method that must be implemented by child classes to execute the tool's functionality.
         Args:
@@ -108,7 +110,7 @@ class Tools():
         """
         pass
 
-    def save_block(self, blocks:[str], save_path:str) -> None:
+    def save_block(self, blocks: List[str], save_path: str) -> None:
         """
         Save code or query blocks to a file at the specified path.
         Creates the directory path if it doesn't exist.
@@ -152,7 +154,7 @@ class Tools():
         self.excutable_blocks_found = False
         return tmp
 
-    def load_exec_block(self, llm_text: str) -> tuple[list[str], str | None]:
+    def load_exec_block(self, llm_text: str) -> Tuple[Optional[List[str]], Optional[str]]:
         """
         Extract code/query blocks from LLM-generated text and process them for execution.
         This method parses the text looking for code blocks marked with the tool's tag (e.g. ```python).

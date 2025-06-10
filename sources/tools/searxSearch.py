@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import sys
 
 if __name__ == "__main__": # if running as a script for individual testing
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -16,13 +17,23 @@ class searxSearch(Tools):
         self.tag = "web_search"
         self.name = "searxSearch"
         self.description = "A tool for searching a SearxNG for web search"
-        self.base_url = base_url or os.getenv("SEARXNG_BASE_URL")  # Requires a SearxNG base URL
+
+        # Try to get base_url from parameter, environment variable, or config file
+        self.base_url = base_url or os.getenv("SEARXNG_BASE_URL")
+
+        # If still no base_url, try to read from config file
+        if not self.base_url and self.config_exists():
+            self.config.read('./config.ini')
+            if 'SEARXNG' in self.config and 'base_url' in self.config['SEARXNG']:
+                self.base_url = self.config['SEARXNG']['base_url']
         self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
         self.paywall_keywords = [
             "Member-only", "access denied", "restricted content", "404", "this page is not working"
         ]
         if not self.base_url:
-            raise ValueError("SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.")
+            # Disable search functionality when no SearxNG is available
+            self.base_url = None
+            print("Warning: No SearxNG URL provided. Web search functionality will be disabled.")
 
     def link_valid(self, link):
         """check if a link is valid."""
@@ -59,6 +70,9 @@ class searxSearch(Tools):
     
     def execute(self, blocks: list, safety: bool = False) -> str:
         """Executes a search query against a SearxNG instance using POST and extracts URLs and titles."""
+        if not self.base_url:
+            return "Error: Web search is not available. SearxNG service is not configured."
+
         if not blocks:
             return "Error: No search query provided."
 
