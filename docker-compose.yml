@@ -78,8 +78,6 @@ services:
     ports:
       - ${BACKEND_PORT:-7777}:${BACKEND_PORT:-7777}
       - ${OLLAMA_PORT:-11434}:${OLLAMA_PORT:-11434}
-      - ${LM_STUDIO_PORT:-1234}:${LM_STUDIO_PORT:-1234}
-      - ${CUSTOM_ADDITIONAL_LLM_PORT:-8000}:${CUSTOM_ADDITIONAL_LLM_PORT:-8000}
     volumes:
       - ./:/app
       - ${WORK_DIR:-.}:/opt/workspace
@@ -88,14 +86,6 @@ services:
       - SEARXNG_URL=${SEARXNG_BASE_URL:-http://searxng:8080}
       - REDIS_URL=${REDIS_BASE_URL:-redis://redis:6379/0}
       - WORK_DIR=/opt/workspace
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - TOGETHER_API_KEY=${TOGETHER_API_KEY}
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
-      - DSK_DEEPSEEK_API_KEY=${DSK_DEEPSEEK_API_KEY}
     network_mode: "host"
   
 volumes:

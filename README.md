@@ -55,16 +55,8 @@ mv .env.example .env
 ```sh
 SEARXNG_BASE_URL="http://127.0.0.1:8080"
 REDIS_BASE_URL="redis://redis:6379/0"
-WORK_DIR="/Users/mlg/Documents/workspace_for_ai"
+WORK_DIR="/Users/username/Documents/workspace_with_my_files"
 OLLAMA_PORT="11434"
-LM_STUDIO_PORT="1234"
-CUSTOM_ADDITIONAL_LLM_PORT="11435"
-OPENAI_API_KEY='optional'
-DEEPSEEK_API_KEY='optional'
-OPENROUTER_API_KEY='optional'
-TOGETHER_API_KEY='optional'
-GOOGLE_API_KEY='optional'
-ANTHROPIC_API_KEY='optional'
 ```
 
 **API Key are totally optional for user who choose to run LLM locally. Which is the primary purpose of this project. Leave empty if you have sufficient hardware**
@@ -296,15 +288,15 @@ And download the chromedriver version matching your OS.
 
 If this section is incomplete please raise an issue.
 
-##  connection adapters Issues
+## Connection Issues
 
+If you get connection errors, make sure Ollama is running:
+
+```bash
+ollama serve
 ```
-Exception: Provider lm-studio failed: HTTP request failed: No connection adapters were found for '127.0.0.1:11434/v1/chat/completions'
-```
 
-Make sure you have `http://` in front of the provider IP address :
-
-`provider_server_address = http://127.0.0.1:11434`
+And verify your `server_address` in config.ini is correct: `127.0.0.1:11434`
 
 ## SearxNG base URL must be provided
 
