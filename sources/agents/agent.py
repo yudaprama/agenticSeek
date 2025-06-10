@@ -128,7 +128,7 @@ class Agent():
         self.status_message = "Stopped"
     
     @abstractmethod
-    def process(self, prompt, speech_module) -> str:
+    def process(self, prompt) -> str:
         """
         abstract method, implementation in child class.
         Process the prompt and return the answer of the agent.
@@ -177,11 +177,11 @@ class Agent():
         self.memory.push('assistant', answer)
         return answer, reasoning
     
-    async def wait_message(self, speech_module):
-        if speech_module is None:
-            return
-        messages = ["Please be patient, I am working on it.",
-                    "Computing... I recommand you have a coffee while I work.",
+    async def wait_message(self):
+        # Speech functionality removed
+        return
+
+
                     "Hold on, I’m crunching numbers.",
                     "Working on it, please let me think."]
         loop = asyncio.get_event_loop()

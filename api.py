@@ -53,12 +53,7 @@ def initialize_system():
     personality_folder = "jarvis" if config.getboolean('MAIN', 'jarvis_personality') else "base"
     languages = config["MAIN"]["languages"].split(' ')
 
-    provider = Provider(
-        provider_name=config["MAIN"]["provider_name"],
-        model=config["MAIN"]["provider_model"],
-        server_address=config["MAIN"]["provider_server_address"],
-        is_local=config.getboolean('MAIN', 'is_local')
-    )
+    provider = Provider(server_address=config["MAIN"]["server_address"])
     logger.info(f"Provider initialized: {provider.provider_name} ({provider.model})")
 
     browser = Browser(
@@ -98,8 +93,6 @@ def initialize_system():
 
     interaction = Interaction(
         agents,
-        tts_enabled=config.getboolean('MAIN', 'speak'),
-        stt_enabled=config.getboolean('MAIN', 'listen'),
         recover_last_session=config.getboolean('MAIN', 'recover_last_session'),
         langs=languages
     )

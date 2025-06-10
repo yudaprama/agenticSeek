@@ -23,10 +23,7 @@ async def main():
     personality_folder = "jarvis" if config.getboolean('MAIN', 'jarvis_personality') else "base"
     languages = config["MAIN"]["languages"].split(' ')
 
-    provider = Provider(provider_name=config["MAIN"]["provider_name"],
-                        model=config["MAIN"]["provider_model"],
-                        server_address=config["MAIN"]["provider_server_address"],
-                        is_local=config.getboolean('MAIN', 'is_local'))
+    provider = Provider(server_address=config["MAIN"]["server_address"])
 
     browser = Browser(
         create_driver(headless=config.getboolean('BROWSER', 'headless_browser'), stealth_mode=stealth_mode, lang=languages[0]),
@@ -55,8 +52,6 @@ async def main():
     ]
 
     interaction = Interaction(agents,
-                              tts_enabled=config.getboolean('MAIN', 'speak'),
-                              stt_enabled=config.getboolean('MAIN', 'listen'),
                               recover_last_session=config.getboolean('MAIN', 'recover_last_session'),
                               langs=languages
                             )
@@ -65,7 +60,6 @@ async def main():
             interaction.get_user()
             if await interaction.think():
                 interaction.show_answer()
-                interaction.speak_answer()
     except Exception as e:
         if config.getboolean('MAIN', 'save_session'):
             interaction.save_session()
