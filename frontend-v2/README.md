@@ -5,7 +5,7 @@ A modern, responsive frontend for AgenticSeek built with React, Vite, Tailwind C
 ## Features
 
 - 🎨 **Modern UI**: Clean, professional design with shadcn/ui components
-- 📱 **Responsive**: Works seamlessly on desktop, tablet, and mobile
+- 🖥️ **Desktop-Optimized**: Full-screen layout designed for desktop productivity
 - 🌙 **Dark Mode Ready**: Built-in dark mode support
 - ⚡ **Fast**: Powered by Vite for lightning-fast development and builds
 - 🎯 **Type-Safe**: Built with modern React patterns and best practices
@@ -68,8 +68,8 @@ VITE_BACKEND_URL=http://localhost:8000
 - Real-time status updates and health monitoring
 
 ### UI Components
-- Modern card-based layout
-- Responsive grid system
+- Full-screen desktop layout with side-by-side panels
+- Fixed-height design optimizing screen real estate
 - Status badges and indicators
 - Smooth animations and transitions
 - Accessible design patterns
@@ -115,7 +115,7 @@ npm run build
 - **Performance**: Vite vs Create React App for faster builds
 - **Maintainability**: Better component structure and modern patterns
 - **Accessibility**: Built-in accessibility features from shadcn/ui
-- **Responsive**: Mobile-first design approach
+- **Desktop-Optimized**: Full-screen layout maximizing productivity
 
 ### Migration
 This is a complete rewrite with the same functionality but modern architecture. The API integration remains compatible with the existing backend.
