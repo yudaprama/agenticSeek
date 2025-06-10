@@ -27,23 +27,12 @@ setup(
         "numpy>=1.24.4",
         "colorama>=0.4.6",
         "python-dotenv>=1.0.0",
-        "playsound>=1.3.0",
-        "soundfile>=0.13.1",
-        "transformers>=4.46.3",
-        "torch>=2.4.1",
         "ollama>=0.4.7",
-        "scipy>=1.9.3",
-        "kokoro>=0.7.12",
         "protobuf>=3.20.3",
         "termcolor>=2.5.0",
         "ipython>=8.34.0",
-        "librosa>=0.10.2.post1",
         "selenium>=4.29.0",
         "markdownify>=1.1.0",
-        "text2emotion>=0.0.5",
-        "python-dotenv>=1.0.0",
-        "adaptive-classifier>=0.0.10",
-        "langid>=1.1.6",
         "chromedriver-autoinstaller>=0.6.4",
         "httpx>=0.27,<0.29",
         "anyio>=3.5.0,<5",
@@ -52,19 +41,11 @@ setup(
         "fake_useragent>=2.1.0",
         "selenium_stealth>=1.0.6",
         "undetected-chromedriver>=3.5.5",
-        "sentencepiece>=0.2.0",
-        "openai",
+
         "sniffio",
         "tqdm>4"
     ],
-    extras_require={
-        "chinese": [
-            "ordered_set",
-            "pypinyin",
-            "cn2an",
-            "jieba",
-        ],
-    },
+
     entry_points={
         "console_scripts": [
             "agenticseek=main:main",

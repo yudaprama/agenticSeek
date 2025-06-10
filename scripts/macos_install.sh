@@ -23,8 +23,6 @@ brew update
 brew install wget
 # Install chromedriver using Homebrew
 brew install --cask chromedriver
-# Install portaudio for pyAudio using Homebrew
-brew install portaudio
 
 # Initialize uv project if pyproject.toml doesn't exist
 if [ ! -f "pyproject.toml" ]; then

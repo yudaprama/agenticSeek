@@ -17,9 +17,6 @@ sudo apt-get update || { echo "Failed to update package list"; exit 1; }
 sudo apt-get install -y \
     python3-dev \
     build-essential \
-    alsa-utils \
-    portaudio19-dev \
-    python3-pyaudio \
     libgtk-3-dev \
     libnotify-dev \
     libgconf-2-4 \

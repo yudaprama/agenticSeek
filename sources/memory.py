@@ -5,10 +5,8 @@ import os
 import sys
 import json
 from typing import List, Tuple, Type, Dict
-import torch
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-from sources.utility import timer_decorator, pretty_print, animate_thinking
+from sources.utility import timer_decorator, pretty_print
 from sources.logger import Logger
 
 class Memory():
@@ -33,11 +31,10 @@ class Memory():
         # memory compression system
         self.model = None
         self.tokenizer = None
-        self.device = self.get_cuda_device()
-        self.memory_compression = memory_compression
+        self.device = "cpu"  # No GPU acceleration needed
+        self.memory_compression = False  # Always disabled to avoid torch dependency
         self.model_provider = model_provider
-        if self.memory_compression:
-            self.download_model()
+        # Memory compression disabled - no model loading
 
     def get_ideal_ctx(self, model_name: str) -> int | None:
         """
@@ -63,11 +60,8 @@ class Memory():
         return context_size
     
     def download_model(self):
-        """Download the model if not already downloaded."""
-        animate_thinking("Loading memory compression model...", color="status")
-        self.tokenizer = AutoTokenizer.from_pretrained("pszemraj/led-base-book-summary")
-        self.model = AutoModelForSeq2SeqLM.from_pretrained("pszemraj/led-base-book-summary")
-        self.logger.info("Memory compression system initialized.")
+        """Memory compression disabled - no model loading."""
+        self.logger.info("Memory compression disabled.")
     
     def get_filename(self) -> str:
         """Get the filename for the save file."""
@@ -186,57 +180,23 @@ class Memory():
         return self.memory
 
     def get_cuda_device(self) -> str:
-        if torch.backends.mps.is_available():
-            return "mps"
-        elif torch.cuda.is_available():
-            return "cuda"
-        else:
-            return "cpu"
+        """No GPU acceleration needed."""
+        return "cpu"
 
     def summarize(self, text: str, min_length: int = 64) -> str:
         """
-        Summarize the text using the AI model.
-        Args:
-            text (str): The text to summarize
-            min_length (int, optional): The minimum length of the summary. Defaults to 64.
-        Returns:
-            str: The summarized text
+        Summarization disabled - returns original text.
         """
-        if self.tokenizer is None or self.model is None:
-            self.logger.warning("No tokenizer or model to perform summarization.")
-            return text
-        if len(text) < min_length*1.5:
-            return text
-        max_length = len(text) // 2 if len(text) > min_length*2 else min_length*2
-        input_text = "summarize: " + text
-        inputs = self.tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True)
-        summary_ids = self.model.generate(
-            inputs['input_ids'],
-            max_length=max_length,
-            min_length=min_length,
-            length_penalty=1.0,
-            num_beams=4,
-            early_stopping=True
-        )
-        summary = self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-        summary.replace('summary:', '')
-        self.logger.info(f"Memory summarized from len {len(text)} to {len(summary)}.")
-        self.logger.info(f"Summarized text:\n{summary}")
-        return summary
+        self.logger.info("Text summarization disabled - returning original text.")
+        return text
     
     #@timer_decorator
     def compress(self) -> str:
         """
         Compress (summarize) the memory using the model.
         """
-        if self.tokenizer is None or self.model is None:
-            self.logger.warning("No tokenizer or model to perform memory compression.")
-            return
-        for i in range(len(self.memory)):
-            if self.memory[i]['role'] == 'system':
-                continue
-            if len(self.memory[i]['content']) > 1024:
-                self.memory[i]['content'] = self.summarize(self.memory[i]['content'])
+        # Memory compression disabled
+        self.logger.info("Memory compression disabled - no action taken.")
     
     def trim_text_to_max_ctx(self, text: str) -> str:
         """

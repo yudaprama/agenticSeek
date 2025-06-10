@@ -60,8 +60,6 @@ echo Installation complete for Windows!
 echo To activate the environment, run: .venv\Scripts\activate
 echo Or run commands with: uv run ^<command^>
 echo.
-echo Note: pyAudio installation may require additional steps on Windows.
-echo If pyAudio fails to install, please install portaudio manually and try again.
-echo Also, chromedriver-autoinstaller should handle chromedriver automatically.
+echo Note: chromedriver-autoinstaller should handle chromedriver automatically.
 echo If needed, download chromedriver manually from: https://sites.google.com/chromium.org/driver/getting-started
 pause
