@@ -52,7 +52,7 @@ class McpAgent(Agent):
         """
         return prompt
     
-    async def process(self, prompt, speech_module) -> str:
+    async def process(self, prompt) -> str:
         if self.enabled == False:
             return "MCP Agent is disabled."
         prompt = self.expand_prompt(prompt)

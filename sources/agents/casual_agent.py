@@ -23,7 +23,7 @@ class CasualAgent(Agent):
                                 memory_compression=False,
                                 model_provider=provider.get_model_name())
     
-    async def process(self, prompt, speech_module) -> str:
+    async def process(self, prompt) -> str:
         self.memory.push('user', prompt)
         animate_thinking("Thinking...", color="status")
         answer, reasoning = await self.llm_request()

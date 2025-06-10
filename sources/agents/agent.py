@@ -1,4 +1,3 @@
-
 from typing import Tuple, Callable
 from abc import abstractmethod
 import os
@@ -180,12 +179,6 @@ class Agent():
     async def wait_message(self):
         # Speech functionality removed
         return
-
-
-                    "Hold on, I’m crunching numbers.",
-                    "Working on it, please let me think."]
-        loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(self.executor, lambda: speech_module.speak(messages[random.randint(0, len(messages)-1)]))
     
     def get_last_tool_type(self) -> str:
         return self.blocks_result[-1].tool_type if len(self.blocks_result) > 0 else None

@@ -190,7 +190,7 @@ class CasualAgent(Agent):
         self.role = "en"
         self.type = "casual_agent"
     
-    def process(self, prompt, speech_module) -> str:
+    def process(self, prompt) -> str:
         self.memory.push('user', prompt)
         animate_thinking("Thinking...", color="status")
         answer, reasoning = self.llm_request()

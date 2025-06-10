@@ -43,7 +43,7 @@ class CoderAgent(Agent):
                f"\nYou must save file at root directory: {self.work_dir}"
         return f"{prompt}\n\n{info}"
 
-    async def process(self, prompt, speech_module) -> str:
+    async def process(self, prompt) -> str:
         answer = ""
         attempt = 0
         max_attempts = 5
@@ -54,7 +54,7 @@ class CoderAgent(Agent):
         while attempt < max_attempts and not self.stop:
             print("Stopped?", self.stop)
             animate_thinking("Thinking...", color="status")
-            await self.wait_message(speech_module)
+            await self.wait_message()
             answer, reasoning = await self.llm_request()
             self.last_reasoning = reasoning
             if clarify_trigger in answer:

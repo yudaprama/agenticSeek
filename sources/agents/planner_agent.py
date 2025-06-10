@@ -6,7 +6,6 @@ from sources.agents.code_agent import CoderAgent
 from sources.agents.file_agent import FileAgent
 from sources.agents.browser_agent import BrowserAgent
 from sources.agents.casual_agent import CasualAgent
-from sources.text_to_speech import Speech
 from sources.tools.tools import Tools
 from sources.logger import Logger
 from sources.memory import Memory
@@ -230,7 +229,7 @@ class PlannerAgent(Agent):
         agent_prompt = self.make_prompt(task['task'], required_infos)
         pretty_print(f"Agent {task['agent']} started working...", color="status")
         self.logger.info(f"Agent {task['agent']} started working on {task['task']}.")
-        answer, reasoning = await self.agents[task['agent'].lower()].process(agent_prompt, None)
+        answer, reasoning = await self.agents[task['agent'].lower()].process(agent_prompt)
         self.last_answer = answer
         self.last_reasoning = reasoning
         self.blocks_result = self.agents[task['agent'].lower()].blocks_result
@@ -247,12 +246,12 @@ class PlannerAgent(Agent):
         self.logger.info(f"Next agent needs: {task_needs}.\n Match previous agent result: {res}")
         return res
 
-    async def process(self, goal: str, speech_module: Speech) -> Tuple[str, str]:
+    async def process(self, goal: str) -> Tuple[str, str]:
         """
         Process the goal by dividing it into tasks and assigning them to agents.
         Args:
             goal (str): The goal to be achieved (user prompt).
-            speech_module (Speech): The speech module for text-to-speech.
+
         Returns:
             Tuple[str, str]: The result of the agent process and empty reasoning string.
         """
@@ -273,7 +272,7 @@ class PlannerAgent(Agent):
             pretty_print(f"I will {task_name}.", color="info")
             self.last_answer = f"I will {task_name.lower()}."
             pretty_print(f"Assigned agent {task['agent']} to {task_name}", color="info")
-            if speech_module: speech_module.speak(f"I will {task_name}. I assigned the {task['agent']} agent to the task.")
+            # Speech functionality removed
 
             if agents_work_result is not None:
                 required_infos = self.get_work_result_agent(task['need'], agents_work_result)

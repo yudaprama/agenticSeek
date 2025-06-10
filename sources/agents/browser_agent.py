@@ -328,14 +328,14 @@ class BrowserAgent(Agent):
         """
         return prompt
     
-    async def process(self, user_prompt: str, speech_module: type) -> Tuple[str, str]:
+    async def process(self, user_prompt: str) -> Tuple[str, str]:
         """
         Process the user prompt to conduct an autonomous web search.
         Start with a google search with searxng using web_search tool.
         Then enter a navigation logic to find the answer or conduct required actions.
         Args:
           user_prompt: The user's input query
-          speech_module: Optional speech output module
+
         Returns:
             tuple containing the final answer and reasoning
         """
@@ -409,7 +409,7 @@ class BrowserAgent(Agent):
                 continue
 
             animate_thinking(f"Navigating to {link}", color="status")
-            if speech_module: speech_module.speak(f"Navigating to {link}")
+            # Speech functionality removed
             nav_ok = self.browser.go_to(link)
             self.search_history.append(link)
             if not nav_ok:
