@@ -1,0 +1,16 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.10.0
+transformers>=4.46.0
+torch>=2.4.0
+numpy>=1.24.0
+scipy>=1.9.0
+adaptive-classifier>=0.0.10
+langid>=1.1.6
+termcolor>=2.4.0
+colorama>=0.4.6
+requests>=2.31.0
+sentencepiece>=0.2.0
+sacremoses>=0.0.53
+protobuf>=3.20.3
+setuptools>=75.6.0 
