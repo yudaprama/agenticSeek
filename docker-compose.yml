@@ -89,6 +89,7 @@ services:
       - REDIS_URL=${REDIS_BASE_URL:-redis://redis:6379/0}
       - WORK_DIR=/opt/workspace
       - BACKEND_PORT=${BACKEND_PORT}
+      - DOCKER_INTERNAL_URL=http://host.docker.internal
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
@@ -99,6 +100,8 @@ services:
       - DSK_DEEPSEEK_API_KEY=${DSK_DEEPSEEK_API_KEY}
     networks:
       - agentic-seek-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   
 volumes:
   redis-data:

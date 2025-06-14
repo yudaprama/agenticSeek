@@ -36,6 +36,7 @@ class Provider:
         }
         self.logger = Logger("provider.log")
         self.api_key = None
+        self.internal_url, self.in_docker = self.get_internal_url()
         self.unsafe_providers = ["openai", "deepseek", "dsk_deepseek", "together", "google", "openrouter"]
         if self.provider_name not in self.available_providers:
             raise ValueError(f"Unknown provider: {provider_name}")
@@ -56,6 +57,13 @@ class Provider:
             pretty_print(f"API key {api_key_var} not found in .env file. Please add it", color="warning")
             exit(1)
         return api_key
+    
+    def get_internal_url(self):
+        load_dotenv()
+        url = os.getenv("DOCKER_INTERNAL_URL")
+        if not url: # running on host
+            return "http://localhost", False
+        return url, True
 
     def respond(self, history, verbose=True):
         """
@@ -152,7 +160,7 @@ class Provider:
         Use local or remote Ollama server to generate text.
         """
         thought = ""
-        host = "http://localhost:11434" if self.is_local else f"http://{self.server_address}"
+        host = f"{self.internal_url}:11434" if self.is_local else f"http://{self.server_address}"
         client = OllamaClient(host=host)
 
         try:
@@ -203,7 +211,13 @@ class Provider:
         Use openai to generate text.
         """
         base_url = self.server_ip
-        if self.is_local:
+        if self.is_local and self.in_docker:
+            try:
+                host, port = base_url.split(':')
+            except Exception as e:
+                port = "8000"
+            client = OpenAI(api_key=self.api_key, base_url=f"{self.internal_url}:{port}")
+        elif self.is_local:
             client = OpenAI(api_key=self.api_key, base_url=f"http://{base_url}")
         else:
             client = OpenAI(api_key=self.api_key)
@@ -326,7 +340,8 @@ class Provider:
         lm studio use endpoint /v1/chat/completions not /chat/completions like openai
         """
         thought = ""
-        route_start = f"{self.server_ip}/v1/chat/completions"
+        url = self.internal_url if self.in_docker else self.server_ip
+        route_start = f"{url}/v1/chat/completions"
         payload = {
             "messages": history,
             "temperature": 0.7,
