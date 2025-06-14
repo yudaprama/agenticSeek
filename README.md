@@ -36,11 +36,19 @@ Disclaimer: This demo, including all the files that appear (e.g: CV_candidates.z
 
 > 🙏 This project started as a side-project and has zero roadmap and zero funding. It's grown way beyond what I expected by ending in GitHub Trending. Contributions, feedback, and patience are deeply appreciated.
 
-## Prerequisites
 
-Make sure you have chrome driver, docker and python3.10 installed.
+Before you begin, ensure you have the following software installed:
 
-For issues related to chrome driver, see the **Chromedriver** section.
+*   **Git:** For cloning the repository. [Download Git](https://git-scm.com/downloads)
+*   **Python 3.10.x:** We strongly recommend using Python version 3.10.x. Using other versions might lead to dependency errors. [Download Python 3.10](https://www.python.org/downloads/release/python-3100/) (pick a 3.10.x version).
+*   **Docker Engine & Docker Compose:** For running bundled services like SearxNG.
+    *   Install Docker Desktop (which includes Docker Compose V2): [Windows](https://docs.docker.com/desktop/install/windows-install/) | [Mac](https://docs.docker.com/desktop/install/mac-install/) | [Linux](https://docs.docker.com/desktop/install/linux-install/)
+    *   Alternatively, install Docker Engine and Docker Compose separately on Linux: [Docker Engine](https://docs.docker.com/engine/install/) | [Docker Compose](https://docs.docker.com/compose/install/) (ensure you install Compose V2, e.g., `sudo apt-get install docker-compose-plugin`).
+*   **Google Chrome:** The web browser used for autonomous browsing tasks. [Download Chrome](https://www.google.com/chrome/).
+*   **ChromeDriver:** The WebDriver for Chrome. This is crucial for browser automation.
+    *   **Important:** Your ChromeDriver version *must* match your installed Google Chrome version. See the [ChromeDriver Installation](#chromedriver-installation) subsection for detailed instructions.
+
+For issues related to ChromeDriver after attempting installation, see the [Known Issues](#chromedriver-issues) section.
 
 ### 1. **Clone the repository and setup**
 
@@ -50,61 +58,22 @@ cd agenticSeek
 mv .env.example .env
 ```
 
-### 2. Change the .env file content
-
-```sh
-SEARXNG_BASE_URL="http://127.0.0.1:8080"
-REDIS_BASE_URL="redis://redis:6379/0"
-WORK_DIR="/Users/mlg/Documents/workspace_for_ai"
-OLLAMA_PORT="11434"
-LM_STUDIO_PORT="1234"
-CUSTOM_ADDITIONAL_LLM_PORT="11435"
-OPENAI_API_KEY='optional'
-DEEPSEEK_API_KEY='optional'
-OPENROUTER_API_KEY='optional'
-TOGETHER_API_KEY='optional'
-GOOGLE_API_KEY='optional'
-ANTHROPIC_API_KEY='optional'
+Modify your `config.ini` file:
+```ini
+[MAIN]
+is_local = True
+provider_name = ollama  # Or lm-studio, openai (for compatible local servers)
+provider_model = deepseekcoder:6.7b # Or the model you downloaded/selected for your provider
+provider_server_address = http://127.0.0.1:11434 # Default for Ollama. For LM-Studio, usually http://127.0.0.1:1234. Adjust if needed.
+# ... other settings ...
 ```
 
-**API Key are totally optional for user who choose to run LLM locally. Which is the primary purpose of this project. Leave empty if you have sufficient hardware**
+*   **Important:**
+    *   For `lm-studio` or other OpenAI-compatible local servers, ensure `provider_server_address` includes the `http://` prefix and the correct port.
+    *   If using LM-Studio, set `provider_name = lm-studio`, not `openai`.
+    *   If using a generic OpenAI-compatible local server, set `provider_name = openai`.
 
-The following environment variables configure your application's connections and API keys.  
-
-Update the `.env` file with your own values as needed:
-
-- **SEARXNG_BASE_URL**: Leave unchanged 
-- **REDIS_BASE_URL**: Leave unchanged 
-- **WORK_DIR**: Path to your working directory on your local machine. AgenticSeek will be able to read and interact with these files.
-- **OLLAMA_PORT**: Port number for the Ollama service.
-- **LM_STUDIO_PORT**: Port number for the LM Studio service.
-- **CUSTOM_ADDITIONAL_LLM_PORT**: Port for any additional custom LLM service.
-
-All API key environment variables below are **optional**. You only need to provide them if you plan to use external APIs instead of running LLMs locally.
-
-### 3. **Start Docker**
-
-Make sure Docker is installed and running on your system. You can start Docker using the following commands:
-
-- **On Linux/macOS:**  
-    Open a terminal and run:
-    ```sh
-    sudo systemctl start docker
-    ```
-    Or launch Docker Desktop from your applications menu if installed.
-
-- **On Windows:**  
-    Start Docker Desktop from the Start menu.
-
-You can verify Docker is running by executing:
-```sh
-docker info
-```
-If you see information about your Docker installation, it is running correctly.
-
----
-
-## Setup for running LLM locally on your machine
+See the table of [Local Providers](#list-of-local-providers) below for a summary.
 
 **Hardware Requirements:**
 
@@ -131,7 +100,7 @@ See the **FAQ** at the end of the README for required hardware.
 is_local = True # Whenever you are running locally or with remote provider.
 provider_name = ollama # or lm-studio, openai, etc..
 provider_model = deepseek-r1:14b # choose a model that fit your hardware
-provider_server_address = 127.0.0.1:11434
+provider_server_address = http://127.0.0.1:11434 # Default for Ollama. Use http://127.0.0.1:1234 for LM-Studio.
 agent_name = Jarvis # name of your AI
 recover_last_session = True # whenever to recover the previous session
 save_session = True # whenever to remember the current session
@@ -144,63 +113,74 @@ headless_browser = True # leave unchanged unless using CLI on host.
 stealth_mode = True # Use undetected selenium to reduce browser detection
 ```
 
-**Warning**:
+Next step: [Start services and run AgenticSeek](#start-services-and-run)
 
-- The `config.ini` file format does not support comments. 
-Do not copy and paste the example configuration directly, as comments will cause errors.  Instead, manually modify the `config.ini` file with your desired settings, excluding any comments.
-
-- Do *NOT* set provider_name to `openai` if using LM-studio for running LLMs. Set it to `lm-studio`.
-
-- Some provider (eg: lm-studio) require you to have `http://` in front of the IP. For example `http://127.0.0.1:1234`
-
-**List of local providers**
-
-| Provider  | Local? | Description                                               |
-|-----------|--------|-----------------------------------------------------------|
-| ollama    | Yes    | Run LLMs locally with ease using ollama as a LLM provider |
-| lm-studio  | Yes    | Run LLM locally with LM studio (set `provider_name` to `lm-studio`)|
-| openai    | Yes     |  Use openai compatible API (eg: llama.cpp server)  |
-
-Next step: [Start services and run AgenticSeek](#Start-services-and-Run)  
-
-*See the **Known issues** section if you are having issues*
-
-*See the **Run with an API** section if your hardware can't run deepseek locally*
-
-*See the **Config** section for detailed config file explanation.*
+*See the [Troubleshooting](#troubleshooting) section if you are having issues.*
+*If your hardware can't run LLMs locally, see [Setup to run with an API](#setup-to-run-with-an-api).*
+*For detailed `config.ini` explanations, see [Config Section](#config).*
 
 ---
 
 ## Setup to run with an API
 
-**Running with an API is optional, see above to run locally.**
+This setup uses external, cloud-based LLM providers. You'll need an API key from your chosen service.
 
-Set the desired provider in the `config.ini`. See below for a list of API providers.
+**1. Choose an API Provider and Get an API Key:**
 
-```sh
+Refer to the [List of API Providers](#list-of-api-providers) below. Visit their websites to sign up and obtain an API key.
+
+**2. Set Your API Key as an Environment Variable:**
+
+
+*   **Linux/macOS:**
+    Open your terminal and use the `export` command. It's best to add this to your shell's profile file (e.g., `~/.bashrc`, `~/.zshrc`) for persistence.
+    ```sh
+    export PROVIDER_API_KEY="your_api_key_here" 
+    # Replace PROVIDER_API_KEY with the specific variable name, e.g., OPENAI_API_KEY, GOOGLE_API_KEY
+    ```
+    Example for TogetherAI:
+    ```sh
+    export TOGETHER_API_KEY="xxxxxxxxxxxxxxxxxxxxxx"
+    ```
+*   **Windows:**
+    *   **Command Prompt (Temporary for current session):**
+        ```cmd
+        set PROVIDER_API_KEY=your_api_key_here
+        ```
+    *   **PowerShell (Temporary for current session):**
+        ```powershell
+        $env:PROVIDER_API_KEY="your_api_key_here"
+        ```
+    *   **Permanently:** Search for "environment variables" in the Windows search bar, click "Edit the system environment variables," then click the "Environment Variables..." button. Add a new User variable with the appropriate name (e.g., `OPENAI_API_KEY`) and your key as the value.
+
+    *(See FAQ: [How do I set API keys?](#how-do-i-set-api-keys) for more details).*
+
+
+**3. Update `config.ini`:**
+```ini
 [MAIN]
 is_local = False
-provider_name = google
-provider_model = gemini-2.0-flash
-provider_server_address = 127.0.0.1:5000 # doesn't matter
+provider_name = openai # Or google, deepseek, togetherAI, huggingface
+provider_model = gpt-3.5-turbo # Or gemini-1.5-flash, deepseek-chat, mistralai/Mixtral-8x7B-Instruct-v0.1 etc.
+provider_server_address = # Typically ignored or can be left blank when is_local = False for most APIs
+# ... other settings ...
 ```
-Warning: Make sure there is not trailing space in the config.
+*Warning:* Make sure there are no trailing spaces in the `config.ini` values.
 
-Export your API key: `export <<PROVIDER>>_API_KEY="xxx"`
+**List of API Providers**
 
-Example: export `TOGETHER_API_KEY="xxxxx"`
+| Provider     | `provider_name` | Local? | Description                                       | API Key Link (Examples)                     |
+|--------------|-----------------|--------|---------------------------------------------------|---------------------------------------------|
+| OpenAI       | `openai`        | No     | Use ChatGPT models via OpenAI's API.              | [platform.openai.com/signup](https://platform.openai.com/signup) |
+| Google Gemini| `google`        | No     | Use Google Gemini models via Google AI Studio.    | [aistudio.google.com/keys](https://aistudio.google.com/keys) |
+| Deepseek     | `deepseek`      | No     | Use Deepseek models via their API.                | [platform.deepseek.com](https://platform.deepseek.com) |
+| Hugging Face | `huggingface`   | No     | Use models from Hugging Face Inference API.       | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
+| TogetherAI   | `togetherAI`    | No     | Use various open-source models via TogetherAI API.| [api.together.ai/settings/api-keys](https://api.together.ai/settings/api-keys) |
 
-**List of API providers**
-  
-| Provider  | Local? | Description                                               |
-|-----------|--------|-----------------------------------------------------------|
-| openai    | Depends  | Use ChatGPT API  |
-| deepseek  | No     | Deepseek API (non-private)                            |
-| huggingface| No    | Hugging-Face API (non-private)                            |
-| togetherAI | No    | Use together AI API (non-private)                         |
-| google | No    | Use google gemini API (non-private)                         |
-
-Please note that coding/bash might fail with gemini, it seems to ignore our prompt for format to respect, which are optimized for deepseek r1. Model such are gpt-4o seem to perform poorly with our prompt as well.
+*Note:*
+*   We advise against using `gpt-4o` or other OpenAI models for complex web browsing and task planning as current prompt optimizations are geared towards models like Deepseek.
+*   Coding/bash tasks might encounter issues with Gemini, as it may not strictly follow formatting prompts optimized for Deepseek.
+*   The `provider_server_address` in `config.ini` is generally not used when `is_local = False` as the API endpoint is usually hardcoded in the respective provider's library.
 
 Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
@@ -212,16 +192,8 @@ Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
 ## Start services and Run
 
-Start required services. This will start all services from the docker-compose.yml, including:
-    - searxng
-    - redis (required by searxng)
-    - frontend
-    - backend (if using `full`)
-
-```sh
-./start_services.sh full # MacOS
-start ./start_services.cmd full # Window
 ```
+*Troubleshooting service start:* If these scripts fail, ensure Docker Engine is running and Docker Compose (V2, `docker compose`) is correctly installed. Check the output in the terminal for error messages. See [FAQ: Help! I get an error when running AgenticSeek or its scripts.](#faq-troubleshooting)
 
 **Warning:** This step will download and load all Docker images, which may take up to 30 minutes. After starting the services, please wait until the backend service is fully running (you should see backend: <info> in the log) before sending any messages. The backend services may take longer to start than others.
 
@@ -380,85 +352,92 @@ Example config:
 is_local = True
 provider_name = ollama
 provider_model = deepseek-r1:32b
-provider_server_address = 127.0.0.1:11434
+provider_server_address = http://127.0.0.1:11434 # Example for Ollama; use http://127.0.0.1:1234 for LM-Studio
 agent_name = Friday
 recover_last_session = False
 save_session = False
 speak = False
 listen = False
+
 jarvis_personality = False
-languages = en zh
+languages = en zh # List of languages for TTS and potentially routing.
 [BROWSER]
 headless_browser = False
 stealth_mode = False
 ```
 
-**Explanation**:
+**Explanation of `config.ini` Settings**:
 
-- is_local -> Runs the agent locally (True) or on a remote server (False).
+*   **`[MAIN]` Section:**
+    *   `is_local`: `True` if using a local LLM provider (Ollama, LM-Studio, local OpenAI-compatible server) or the self-hosted server option. `False` if using a cloud-based API (OpenAI, Google, etc.).
+    *   `provider_name`: Specifies the LLM provider.
+        *   Local options: `ollama`, `lm-studio`, `openai` (for local OpenAI-compatible servers), `server` (for the self-hosted server setup).
+        *   API options: `openai`, `google`, `deepseek`, `huggingface`, `togetherAI`.
+    *   `provider_model`: The specific model name or ID for the chosen provider (e.g., `deepseekcoder:6.7b` for Ollama, `gpt-3.5-turbo` for OpenAI API, `mistralai/Mixtral-8x7B-Instruct-v0.1` for TogetherAI).
+    *   `provider_server_address`: The address of your LLM provider.
+        *   For local providers: e.g., `http://127.0.0.1:11434` for Ollama, `http://127.0.0.1:1234` for LM-Studio.
+        *   For the `server` provider type: The address of your self-hosted LLM server (e.g., `http://your_server_ip:3333`).
+        *   For cloud APIs (`is_local = False`): This is often ignored or can be left blank, as the API endpoint is usually handled by the client library.
+    *   `agent_name`: Name of the AI assistant (e.g., Friday). Used as a trigger word for speech-to-text if enabled.
+    *   `recover_last_session`: `True` to attempt to restore the previous session's state, `False` to start fresh.
+    *   `save_session`: `True` to save the current session's state for potential recovery, `False` otherwise.
+    *   `speak`: `True` to enable text-to-speech voice output, `False` to disable.
+    *   `listen`: `True` to enable speech-to-text voice input (CLI mode only), `False` to disable.
+    *   `work_dir`: **Crucial:** The directory where AgenticSeek will read/write files. **Ensure this path is valid and accessible on your system.**
+    *   `jarvis_personality`: `True` to use a more "Jarvis-like" system prompt (experimental), `False` for the standard prompt.
+    *   `languages`: A comma-separated list of languages (e.g., `en, zh, fr`). Used for TTS voice selection (defaults to the first) and can assist the LLM router. Avoid too many or very similar languages for router efficiency.
+*   **`[BROWSER]` Section:**
+    *   `headless_browser`: `True` to run the automated browser without a visible window (recommended for web interface or non-interactive use). `False` to show the browser window (useful for CLI mode or debugging).
+    *   `stealth_mode`: `True` to enable measures to make browser automation harder to detect. May require manual installation of browser extensions like anticaptcha.
 
-- provider_name -> The provider to use (one of: `ollama`, `server`, `lm-studio`, `deepseek-api`)
 
-- provider_model -> The model used, e.g., deepseek-r1:32b.
+This section summarizes the supported LLM provider types. Configure them in `config.ini`.
 
-- provider_server_address -> Server address, e.g., 127.0.0.1:11434 for local. Set to anything for non-local API.
+**Local Providers (Run on Your Own Hardware):**
 
-- agent_name -> Name of the agent, e.g., Friday. Used as a trigger word for TTS.
+| Provider Name in `config.ini` | `is_local` | Description                                                                 | Setup Section                                                    |
+|-------------------------------|------------|-----------------------------------------------------------------------------|------------------------------------------------------------------|
+| `ollama`                      | `True`     | Use Ollama to serve local LLMs.                                             | [Setup for running LLM locally](#setup-for-running-llm-locally-on-your-machine) |
+| `lm-studio`                   | `True`     | Use LM-Studio to serve local LLMs.                                          | [Setup for running LLM locally](#setup-for-running-llm-locally-on-your-machine) |
+| `openai` (for local server)   | `True`     | Connect to a local server that exposes an OpenAI-compatible API (e.g., llama.cpp). | [Setup for running LLM locally](#setup-for-running-llm-locally-on-your-machine) |
+| `server`                      | `False`    | Connect to the AgenticSeek self-hosted LLM server running on another machine. | [Setup to run the LLM on your own server](#setup-to-run-the-llm-on-your-own-server) |
 
-- recover_last_session -> Restarts from last session (True) or not (False).
+**API Providers (Cloud-Based):**
 
-- save_session -> Saves session data (True) or not (False).
+| Provider Name in `config.ini` | `is_local` | Description                                      | Setup Section                                       |
+|-------------------------------|------------|--------------------------------------------------|-----------------------------------------------------|
+| `openai`                      | `False`    | Use OpenAI's official API (e.g., GPT-3.5, GPT-4). | [Setup to run with an API](#setup-to-run-with-an-api) |
+| `google`                      | `False`    | Use Google's Gemini models via API.              | [Setup to run with an API](#setup-to-run-with-an-api) |
+| `deepseek`                    | `False`    | Use Deepseek's official API.                     | [Setup to run with an API](#setup-to-run-with-an-api) |
+| `huggingface`                 | `False`    | Use Hugging Face Inference API.                  | [Setup to run with an API](#setup-to-run-with-an-api) |
+| `togetherAI`                  | `False`    | Use TogetherAI's API for various open models.    | [Setup to run with an API](#setup-to-run-with-an-api) |
 
-- speak -> Enables voice output (True) or not (False).
+---
+## Troubleshooting
 
-- listen -> listen to voice input (True) or not (False).
+If you encounter issues, this section provides guidance.
 
-- jarvis_personality -> Uses a JARVIS-like personality (True) or not (False). This simply change the prompt file.
+# Known Issues
 
-- languages -> The list of supported language, needed for the llm router to work properly, avoid putting too many or too similar languages.
+## ChromeDriver Issues
 
-- headless_browser -> Runs browser without a visible window (True) or not (False).
+**Error Example:** `SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version XXX`
 
-- stealth_mode -> Make bot detector time harder. Only downside is you have to manually install the anticaptcha extension.
+*   **Cause:** Your installed ChromeDriver version is incompatible with your Google Chrome browser version.
+*   **Solution:**
+    1.  **Check Chrome Version:** Open Google Chrome, go to `Settings > About Chrome` to find your version (e.g., "Version 120.0.6099.110").
+    2.  **Download Matching ChromeDriver:**
+        *   For Chrome versions 115 and newer: Go to the [Chrome for Testing (CfT) JSON Endpoints](https://googlechromelabs.github.io/chrome-for-testing/). Find the "stable" channel and download the ChromeDriver for your OS that matches your Chrome's major version.
+        *   For older versions (less common): You might find them on the [ChromeDriver - WebDriver for Chrome](https://chromedriver.chromium.org/downloads) page.
+        *   The image below shows an example from the CfT page:
+            ![Download Chromedriver specific version from Chrome for Testing page](./media/chromedriver_readme.png)
+    3.  **Install ChromeDriver:**
+        *   Ensure the downloaded `chromedriver` (or `chromedriver.exe` on Windows) is placed in a directory listed in your system's PATH environment variable (e.g., `/usr/local/bin` on Linux/macOS, or a custom scripts folder added to PATH on Windows).
+        *   Alternatively, place it in the root directory of the `agenticSeek` project.
+        *   Make sure the driver is executable (e.g., `chmod +x chromedriver` on Linux/macOS).
+    4.  Refer to the [ChromeDriver Installation](#chromedriver-installation) section in the main Installation guide for more details.
 
-- languages -> List of supported languages. Required for agent routing system. The longer the languages list the more model will be downloaded.
-
-## Providers
-
-The table below show the available providers:
-
-| Provider  | Local? | Description                                               |
-|-----------|--------|-----------------------------------------------------------|
-| ollama    | Yes    | Run LLMs locally with ease using ollama as a LLM provider |
-| server    | Yes    | Host the model on another machine, run your local machine |
-| lm-studio  | Yes    | Run LLM locally with LM studio (`lm-studio`)             |
-| openai    | Depends  | Use ChatGPT API (non-private) or openai compatible API  |
-| deepseek-api  | No     | Deepseek API (non-private)                            |
-| huggingface| No    | Hugging-Face API (non-private)                            |
-| togetherAI | No    | Use together AI API (non-private)                         |
-| google | No    | Use google gemini API (non-private)                         |
-
-To select a provider change the config.ini:
-
-```
-is_local = True
-provider_name = ollama
-provider_model = deepseek-r1:32b
-provider_server_address = 127.0.0.1:5000
-```
-`is_local`: should be True for any locally running LLM, otherwise False.
-
-`provider_name`: Select the provider to use by it's name, see the provider list above.
-
-`provider_model`: Set the model to use by the agent.
-
-`provider_server_address`: can be set to anything if you are not using the server provider.
-
-# Known issues
-
-## Chromedriver Issues
-
-**Known error #1:** *chromedriver mismatch*
+If this section is incomplete or you encounter other ChromeDriver issues, please consider searching existing [GitHub Issues](https://github.com/Fosowl/agenticSeek/issues) or raising a new one.
 
 `Exception: Failed to initialize browser: Message: session not created: This version of ChromeDriver only supports Chrome version 113
 Current browser version is 134.0.6998.89 with binary path`
@@ -482,52 +461,20 @@ If this section is incomplete please raise an issue.
 ##  connection adapters Issues
 
 ```
-Exception: Provider lm-studio failed: HTTP request failed: No connection adapters were found for '127.0.0.1:11434/v1/chat/completions'
+Exception: Provider lm-studio failed: HTTP request failed: No connection adapters were found for '127.0.0.1:1234/v1/chat/completions'` (Note: port may vary)
 ```
 
-Make sure you have `http://` in front of the provider IP address :
+*   **Cause:** The `provider_server_address` in `config.ini` for `lm-studio` (or other similar local OpenAI-compatible servers) is missing the `http://` prefix or is pointing to the wrong port.
+*   **Solution:**
+    *   Ensure the address includes `http://`. LM-Studio typically defaults to `http://127.0.0.1:1234`.
+    *   Correct `config.ini`: `provider_server_address = http://127.0.0.1:1234` (or your actual LM-Studio server port).
 
-`provider_server_address = http://127.0.0.1:11434`
-
-## SearxNG base URL must be provided
+## SearxNG Base URL Not Provided
 
 ```
 raise ValueError("SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.")
-ValueError: SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.
+ValueError: SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.`
 ```
-
-Maybe you didn't move `.env.example` as `.env` ? You can also export SEARXNG_BASE_URL:
-
-`export  SEARXNG_BASE_URL="http://127.0.0.1:8080"`
-
-## FAQ
-
-**Q: What hardware do I need?**  
-
-| Model Size  | GPU  | Comment                                               |
-|-----------|--------|-----------------------------------------------------------|
-| 7B        | 8GB Vram | ⚠️ Not recommended. Performance is poor, frequent hallucinations, and planner agents will likely fail. |
-| 14B        | 12 GB VRAM (e.g. RTX 3060) | ✅ Usable for simple tasks. May struggle with web browsing and planning tasks. |
-| 32B        | 24+ GB VRAM (e.g. RTX 4090) | 🚀 Success with most tasks, might still struggle with task planning |
-| 70B+        | 48+ GB Vram (eg. mac studio) | 💪 Excellent. Recommended for advanced use cases. |
-
-**Q: Why Deepseek R1 over other models?**  
-
-Deepseek R1 excels at reasoning and tool use for its size. We think it’s a solid fit for our needs other models work fine, but Deepseek is our primary pick.
-
-**Q: I get an error running `cli.py`. What do I do?**  
-
-Ensure local is running (`ollama serve`), your `config.ini` matches your provider, and dependencies are installed. If none work feel free to raise an issue.
-
-**Q: Can it really run 100% locally?**  
-
-Yes with Ollama, lm-studio or server providers, all speech to text, LLM and text to speech model run locally. Non-local options (OpenAI or others API) are optional.
-
-**Q: Why should I use AgenticSeek when I have Manus?**
-
-This started as Side-Project we did out of interest about AI agents. What’s special about it is that we want to use local model and avoid APIs.
-We draw inspiration from Jarvis and Friday (Iron man movies) to make it "cool" but for functionality we take more inspiration from Manus, because that's what people want in the first place: a local manus alternative.
-Unlike Manus, AgenticSeek prioritizes independence from external systems, giving you more control, privacy and avoid api cost.
 
 ## Contribute
 
