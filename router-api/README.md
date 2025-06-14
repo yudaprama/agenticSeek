@@ -160,6 +160,45 @@ response = requests.post(
 print(response.json())
 ```
 
+## CI/CD Pipeline
+
+This project includes automated GitHub Actions workflows:
+
+### 🚀 **Build and Push** (`build-router-api.yml`)
+- **Trigger**: Push to `router` branch
+- **Actions**: 
+  - Builds multi-platform Docker image (linux/amd64, linux/arm64)
+  - Pushes to GitHub Container Registry (`ghcr.io`)
+  - Runs security vulnerability scanning with Trivy
+  - Generates deployment summary
+
+### 🧪 **Testing** (`test-router-api.yml`)  
+- **Trigger**: Pull requests to `router` branch
+- **Actions**:
+  - Builds and tests Docker image
+  - Runs API integration tests
+  - Performs code linting and security checks
+  - Validates dependencies for vulnerabilities
+
+### Container Registry
+
+Images are automatically published to:
+```
+ghcr.io/{owner}/{repo}/router-api:router
+```
+
+### Production Deployment
+
+Use the pre-built image from GitHub Container Registry:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/fosowl/agenticseek/router-api:router
+
+# Run with production compose
+docker-compose -f docker-compose.prod.yml up
+```
+
 ## Dependencies
 
 - FastAPI >= 0.115.0
