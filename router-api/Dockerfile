@@ -17,16 +17,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
-COPY requirements.txt .
+COPY router-api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire project structure
-COPY ../sources ./sources
-COPY ../llm_router ./llm_router
-COPY ../prompts ./prompts
+COPY sources ./sources
+COPY llm_router ./llm_router
+COPY prompts ./prompts
 
 # Copy the API code
-COPY main.py .
+COPY router-api/main.py .
 
 # Create necessary directories
 RUN mkdir -p .logs
