@@ -184,7 +184,7 @@ This project includes automated GitHub Actions workflows:
 
 Images are automatically published to:
 ```
-ghcr.io/{owner}/{repo}/router-api:router
+ghcr.io/{owner}/agenticseek/router-api:router
 ```
 
 ### Production Deployment
@@ -193,7 +193,7 @@ Use the pre-built image from GitHub Container Registry:
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/fosowl/agenticseek/router-api:router
+docker pull ghcr.io/yudaprama/agenticseek/router-api:router
 
 # Run with production compose
 docker-compose -f docker-compose.prod.yml up

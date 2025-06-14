@@ -11,7 +11,7 @@ This guide covers different deployment scenarios for the AgentRouter API.
 ### Workflow
 1. **Push to router branch** → Triggers automatic build and push
 2. **Pull Request** → Runs tests and security checks
-3. **Image available** at `ghcr.io/fosowl/agenticseek/router-api:router`
+3. **Image available** at `ghcr.io/yudaprama/agenticseek/router-api:router`
 
 ## 🐳 Container Deployment Options
 
@@ -19,7 +19,7 @@ This guide covers different deployment scenarios for the AgentRouter API.
 
 ```bash
 # Download the production compose file
-curl -O https://raw.githubusercontent.com/Fosowl/agenticSeek/router/router-api/docker-compose.prod.yml
+curl -O https://raw.githubusercontent.com/yudaprama/agenticSeek/router/router-api/docker-compose.prod.yml
 
 # Create logs directory
 mkdir -p logs
@@ -35,7 +35,7 @@ docker-compose -f docker-compose.prod.yml logs -f
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/fosowl/agenticseek/router-api:router
+docker pull ghcr.io/yudaprama/agenticseek/router-api:router
 
 # Run the container
 docker run -d \
@@ -43,7 +43,7 @@ docker run -d \
   -p 8080:8080 \
   -v $(pwd)/logs:/app/.logs \
   --restart unless-stopped \
-  ghcr.io/fosowl/agenticseek/router-api:router
+  ghcr.io/yudaprama/agenticseek/router-api:router
 
 # Check health
 curl http://localhost:8080/health
@@ -71,7 +71,7 @@ spec:
     spec:
       containers:
       - name: router-api
-        image: ghcr.io/fosowl/agenticseek/router-api:router
+        image: ghcr.io/yudaprama/agenticseek/router-api:router
         ports:
         - containerPort: 8080
         resources:
@@ -197,7 +197,7 @@ docker run -d \
   --name router-api \
   --network router-network \
   -p 8080:8080 \
-  ghcr.io/fosowl/agenticseek/router-api:router
+  ghcr.io/yudaprama/agenticseek/router-api:router
 ```
 
 ### Access Control
@@ -267,7 +267,7 @@ docker-compose up --scale router-api=3
 ### Updating to Latest
 ```bash
 # Pull latest image
-docker pull ghcr.io/fosowl/agenticseek/router-api:router
+docker pull ghcr.io/yudaprama/agenticseek/router-api:router
 
 # Restart with new image
 docker-compose -f docker-compose.prod.yml up -d
@@ -276,8 +276,8 @@ docker-compose -f docker-compose.prod.yml up -d
 ### Rollback Strategy
 ```bash
 # Tag specific versions for rollback
-docker tag ghcr.io/fosowl/agenticseek/router-api:router \
-           ghcr.io/fosowl/agenticseek/router-api:backup-$(date +%Y%m%d)
+docker tag ghcr.io/yudaprama/agenticseek/router-api:router \
+           ghcr.io/yudaprama/agenticseek/router-api:backup-$(date +%Y%m%d)
 
 # Rollback to previous version
 docker-compose -f docker-compose.prod.yml down
