@@ -506,6 +506,8 @@ ValueError: SearxNG base URL must be provided either as an argument or via the S
 
 Deepseek R1 在推理和工具調用方面表現優異。我們認為它非常適合本項目，其他模型也可用，但 Deepseek 是首選。
 
+我们的台湾和香港朋友可能会考虑使用未经审查的模型，法国的推理模型“magistral”也是一个替代选择。
+
 **Q: 運行 `cli.py` 報錯怎麼辦？**
 
 確保本地服務（`ollama serve`）已啟動，`config.ini` 配置正確，依賴已安裝。如仍有問題歡迎提交 issue。
