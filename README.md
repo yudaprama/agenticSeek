@@ -105,10 +105,6 @@ If you see information about your Docker installation, it is running correctly.
 
 See the table of [Local Providers](#list-of-local-providers) below for a summary.
 
-**Hardware Requirements:**
-
-To run LLMs locally, you'll need sufficient hardware. At a minimum, a GPU capable of running Qwen/Deepseek 14B is required. See the FAQ for detailed model/performance recommendations.
-
 Next step: [Run AgenticSeek locally](#start-services-and-run)
 
 *See the [Troubleshooting](#troubleshooting) section if you are having issues.*
@@ -121,7 +117,7 @@ Next step: [Run AgenticSeek locally](#start-services-and-run)
 
 **Hardware Requirements:**
 
-To run LLMs locally, you'll need sufficient hardware. At a minimum, a GPU capable of running Qwen/Deepseek 14B is required. See the FAQ for detailed model/performance recommendations.
+To run LLMs locally, you'll need sufficient hardware. At a minimum, a GPU capable of running Magistral, Qwen or Deepseek 14B is required. See the FAQ for detailed model/performance recommendations.
 
 **Setup your local provider**  
 
@@ -135,7 +131,7 @@ See below for a list of local supported provider.
 
 **Update the config.ini**
 
-Change the config.ini file to set the provider_name to a supported provider and provider_model to a LLM supported by your provider. We recommend reasoning model such as *Qwen* or *Deepseek*.
+Change the config.ini file to set the provider_name to a supported provider and provider_model to a LLM supported by your provider. We recommend reasoning model such as *Magistral* or *Deepseek*.
 
 See the **FAQ** at the end of the README for required hardware.
 
@@ -547,6 +543,35 @@ Exception: Provider lm-studio failed: HTTP request failed: No connection adapter
 raise ValueError("SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.")
 ValueError: SearxNG base URL must be provided either as an argument or via the SEARXNG_BASE_URL environment variable.`
 ```
+
+## FAQ
+
+**Q: What hardware do I need?**  
+
+| Model Size  | GPU  | Comment                                               |
+|-----------|--------|-----------------------------------------------------------|
+| 7B        | 8GB Vram | ⚠️ Not recommended. Performance is poor, frequent hallucinations, and planner agents will likely fail. |
+| 14B        | 12 GB VRAM (e.g. RTX 3060) | ✅ Usable for simple tasks. May struggle with web browsing and planning tasks. |
+| 32B        | 24+ GB VRAM (e.g. RTX 4090) | 🚀 Success with most tasks, might still struggle with task planning |
+| 70B+        | 48+ GB Vram | 💪 Excellent. Recommended for advanced use cases. |
+
+**Q: I get an error what do I do?**  
+
+Ensure local is running (`ollama serve`), your `config.ini` matches your provider, and dependencies are installed. If none work feel free to raise an issue.
+
+**Q: Can it really run 100% locally?**  
+
+Yes with Ollama, lm-studio or server providers, all speech to text, LLM and text to speech model run locally. Non-local options (OpenAI or others API) are optional.
+
+**Q: Why should I use AgenticSeek when I have Manus?**
+
+Unlike Manus, AgenticSeek prioritizes independence from external systems, giving you more control, privacy and avoid api cost.
+
+**Q: Who is behind the project ?**
+
+The project was created by me, along with two friends who serve as maintainers and contributors from the open-source community on GitHub. We’re just a group of passionate individuals, not a startup or affiliated with any organization.
+
+Any AgenticSeek account on X other than my personal account (https://x.com/Martin993886460) is an impersonation.
 
 ## Contribute
 
