@@ -337,9 +337,7 @@ class Provider:
     def lm_studio_fn(self, history, verbose=False):
         """
         Use local lm-studio server to generate text.
-        lm studio use endpoint /v1/chat/completions not /chat/completions like openai
         """
-        thought = ""
         url = self.internal_url if self.in_docker else self.server_ip
         route_start = f"{url}/v1/chat/completions"
         payload = {
@@ -348,16 +346,40 @@ class Provider:
             "max_tokens": 4096,
             "model": self.model
         }
+
         try:
-            response = requests.post(route_start, json=payload)
-            result = response.json()
+            response = requests.post(route_start, json=payload, timeout=30)
+            if response.status_code != 200:
+                raise Exception(f"LM Studio returned status {response.status_code}: {response.text}")
+            if not response.text.strip():
+                raise Exception("LM Studio returned empty response")
+            try:
+                result = response.json()
+            except ValueError as json_err:
+                raise Exception(f"Invalid JSON from LM Studio: {response.text[:200]}") from json_err
+
             if verbose:
                 print("Response from LM Studio:", result)
-            return result.get("choices", [{}])[0].get("message", {}).get("content", "")
+            choices = result.get("choices", [])
+            if not choices:
+                raise Exception(f"No choices in LM Studio response: {result}")
+
+            message = choices[0].get("message", {})
+            content = message.get("content", "")
+            if not content:
+                raise Exception(f"Empty content in LM Studio response: {result}")
+            return content
+
+        except requests.exceptions.Timeout:
+            raise Exception("LM Studio request timed out - check if server is responsive")
+        except requests.exceptions.ConnectionError:
+            raise Exception(f"Cannot connect to LM Studio at {route_start} - check if server is running")
         except requests.exceptions.RequestException as e:
             raise Exception(f"HTTP request failed: {str(e)}") from e
         except Exception as e:
-            raise Exception(f"An error occurred: {str(e)}") from e
+            if "LM Studio" in str(e):
+                raise  # Re-raise our custom exceptions
+            raise Exception(f"Unexpected error: {str(e)}") from e
         return thought
 
     def openrouter_fn(self, history, verbose=False):

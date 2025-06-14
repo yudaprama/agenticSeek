@@ -36,6 +36,7 @@ Disclaimer: This demo, including all the files that appear (e.g: CV_candidates.z
 
 > 🙏 This project started as a side-project and has zero roadmap and zero funding. It's grown way beyond what I expected by ending in GitHub Trending. Contributions, feedback, and patience are deeply appreciated.
 
+## Prerequisites
 
 Before you begin, ensure you have the following software installed:
 
@@ -44,11 +45,6 @@ Before you begin, ensure you have the following software installed:
 *   **Docker Engine & Docker Compose:** For running bundled services like SearxNG.
     *   Install Docker Desktop (which includes Docker Compose V2): [Windows](https://docs.docker.com/desktop/install/windows-install/) | [Mac](https://docs.docker.com/desktop/install/mac-install/) | [Linux](https://docs.docker.com/desktop/install/linux-install/)
     *   Alternatively, install Docker Engine and Docker Compose separately on Linux: [Docker Engine](https://docs.docker.com/engine/install/) | [Docker Compose](https://docs.docker.com/compose/install/) (ensure you install Compose V2, e.g., `sudo apt-get install docker-compose-plugin`).
-*   **Google Chrome:** The web browser used for autonomous browsing tasks. [Download Chrome](https://www.google.com/chrome/).
-*   **ChromeDriver:** The WebDriver for Chrome. This is crucial for browser automation.
-    *   **Important:** Your ChromeDriver version *must* match your installed Google Chrome version. See the [ChromeDriver Installation](#chromedriver-installation) subsection for detailed instructions.
-
-For issues related to ChromeDriver after attempting installation, see the [Known Issues](#chromedriver-issues) section.
 
 ### 1. **Clone the repository and setup**
 
@@ -58,22 +54,70 @@ cd agenticSeek
 mv .env.example .env
 ```
 
-Modify your `config.ini` file:
-```ini
-[MAIN]
-is_local = True
-provider_name = ollama  # Or lm-studio, openai (for compatible local servers)
-provider_model = deepseekcoder:6.7b # Or the model you downloaded/selected for your provider
-provider_server_address = http://127.0.0.1:11434 # Default for Ollama. For LM-Studio, usually http://127.0.0.1:1234. Adjust if needed.
-# ... other settings ...
+### 2. Change the .env file content
+
+```sh
+SEARXNG_BASE_URL="http://127.0.0.1:8080"
+REDIS_BASE_URL="redis://redis:6379/0"
+WORK_DIR="/Users/mlg/Documents/workspace_for_ai"
+OLLAMA_PORT="11434"
+LM_STUDIO_PORT="1234"
+CUSTOM_ADDITIONAL_LLM_PORT="11435"
+OPENAI_API_KEY='optional'
+DEEPSEEK_API_KEY='optional'
+OPENROUTER_API_KEY='optional'
+TOGETHER_API_KEY='optional'
+GOOGLE_API_KEY='optional'
+ANTHROPIC_API_KEY='optional'
 ```
 
-*   **Important:**
-    *   For `lm-studio` or other OpenAI-compatible local servers, ensure `provider_server_address` includes the `http://` prefix and the correct port.
-    *   If using LM-Studio, set `provider_name = lm-studio`, not `openai`.
-    *   If using a generic OpenAI-compatible local server, set `provider_name = openai`.
+
+Update the `.env` file with your own values as needed:
+
+- **SEARXNG_BASE_URL**: Leave unchanged 
+- **REDIS_BASE_URL**: Leave unchanged 
+- **WORK_DIR**: Path to your working directory on your local machine. AgenticSeek will be able to read and interact with these files.
+- **OLLAMA_PORT**: Port number for the Ollama service.
+- **LM_STUDIO_PORT**: Port number for the LM Studio service.
+- **CUSTOM_ADDITIONAL_LLM_PORT**: Port for any additional custom LLM service.
+
+**API Key are totally optional for user who choose to run LLM locally. Which is the primary purpose of this project. Leave empty if you have sufficient hardware**
+
+### 3. **Start Docker**
+
+Make sure Docker is installed and running on your system. You can start Docker using the following commands:
+
+- **On Linux/macOS:**  
+    Open a terminal and run:
+    ```sh
+    sudo systemctl start docker
+    ```
+    Or launch Docker Desktop from your applications menu if installed.
+
+- **On Windows:**  
+    Start Docker Desktop from the Start menu.
+
+You can verify Docker is running by executing:
+```sh
+docker info
+```
+If you see information about your Docker installation, it is running correctly.
 
 See the table of [Local Providers](#list-of-local-providers) below for a summary.
+
+**Hardware Requirements:**
+
+To run LLMs locally, you'll need sufficient hardware. At a minimum, a GPU capable of running Qwen/Deepseek 14B is required. See the FAQ for detailed model/performance recommendations.
+
+Next step: [Run AgenticSeek locally](#start-services-and-run)
+
+*See the [Troubleshooting](#troubleshooting) section if you are having issues.*
+*If your hardware can't run LLMs locally, see [Setup to run with an API](#setup-to-run-with-an-api).*
+*For detailed `config.ini` explanations, see [Config Section](#config).*
+
+---
+
+## Setup for running LLM locally on your machine
 
 **Hardware Requirements:**
 
@@ -100,7 +144,7 @@ See the **FAQ** at the end of the README for required hardware.
 is_local = True # Whenever you are running locally or with remote provider.
 provider_name = ollama # or lm-studio, openai, etc..
 provider_model = deepseek-r1:14b # choose a model that fit your hardware
-provider_server_address = http://127.0.0.1:11434 # Default for Ollama. Use http://127.0.0.1:1234 for LM-Studio.
+provider_server_address = 127.0.0.1:11434
 agent_name = Jarvis # name of your AI
 recover_last_session = True # whenever to recover the previous session
 save_session = True # whenever to remember the current session
@@ -113,13 +157,28 @@ headless_browser = True # leave unchanged unless using CLI on host.
 stealth_mode = True # Use undetected selenium to reduce browser detection
 ```
 
-Next step: [Start services and run AgenticSeek](#start-services-and-run)
+**Warning**:
+
+- The `config.ini` file format does not support comments. 
+Do not copy and paste the example configuration directly, as comments will cause errors.  Instead, manually modify the `config.ini` file with your desired settings, excluding any comments.
+
+- Do *NOT* set provider_name to `openai` if using LM-studio for running LLMs. Set it to `lm-studio`.
+
+- Some provider (eg: lm-studio) require you to have `http://` in front of the IP. For example `http://127.0.0.1:1234`
+
+**List of local providers**
+
+| Provider  | Local? | Description                                               |
+|-----------|--------|-----------------------------------------------------------|
+| ollama    | Yes    | Run LLMs locally with ease using ollama as a LLM provider |
+| lm-studio  | Yes    | Run LLM locally with LM studio (set `provider_name` to `lm-studio`)|
+| openai    | Yes     |  Use openai compatible API (eg: llama.cpp server)  |
+
+Next step: [Start services and run AgenticSeek](#Start-services-and-Run)  
 
 *See the [Troubleshooting](#troubleshooting) section if you are having issues.*
 *If your hardware can't run LLMs locally, see [Setup to run with an API](#setup-to-run-with-an-api).*
 *For detailed `config.ini` explanations, see [Config Section](#config).*
-
----
 
 ## Setup to run with an API
 
@@ -192,14 +251,26 @@ Next step: [Start services and run AgenticSeek](#Start-services-and-Run)
 
 ## Start services and Run
 
-```
-*Troubleshooting service start:* If these scripts fail, ensure Docker Engine is running and Docker Compose (V2, `docker compose`) is correctly installed. Check the output in the terminal for error messages. See [FAQ: Help! I get an error when running AgenticSeek or its scripts.](#faq-troubleshooting)
+By default AgenticSeek is run fully in docker.
 
-**Warning:** This step will download and load all Docker images, which may take up to 30 minutes. After starting the services, please wait until the backend service is fully running (you should see backend: <info> in the log) before sending any messages. The backend services may take longer to start than others.
+Start required services. This will start all services from the docker-compose.yml, including:
+    - searxng
+    - redis (required by searxng)
+    - frontend
+    - backend (if using `full`)
+
+```sh
+./start_services.sh full # MacOS
+start ./start_services.cmd full # Window
+```
+
+**Warning:** This step will download and load all Docker images, which may take up to 30 minutes. After starting the services, please wait until the backend service is fully running (you should see **backend: "GET /health HTTP/1.1" 200 OK** in the log) before sending any messages. The backend services might take 5 minute to start on first run.
 
 Go to `http://localhost:3000/` and you should see the web interface.
 
-**Optional:** Run with the CLI interface:
+*Troubleshooting service start:* If these scripts fail, ensure Docker Engine is running and Docker Compose (V2, `docker compose`) is correctly installed. Check the output in the terminal for error messages. See [FAQ: Help! I get an error when running AgenticSeek or its scripts.](#faq-troubleshooting)
+
+**Optional:** Run on host (CLI mode):
 
 To run with CLI interface you would have to install package on host:
 
@@ -215,7 +286,8 @@ Start services:
 start ./start_services.cmd # Window
 ```
 
-Then run : `python3 cli.py`
+Use the CLI: `python3 cli.py`
+
 
 ---
 
@@ -495,4 +567,9 @@ We’re looking for developers to improve AgenticSeek! Check out open issues or 
 ## Special Thanks:
 
  > [tcsenpai](https://github.com/tcsenpai) and [plitc](https://github.com/plitc) For helping with backend dockerization
+
+## Sponsors:
+
+5$ or more Monthly sponsor appear here:
+- **tatra-labs**
 
